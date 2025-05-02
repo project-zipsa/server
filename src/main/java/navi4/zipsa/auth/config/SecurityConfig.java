@@ -1,6 +1,8 @@
-package navi4.zipsa.auth.security;
+package navi4.zipsa.auth.config;
 
 import lombok.RequiredArgsConstructor;
+import navi4.zipsa.auth.filter.JwtAuthorizationFilter;
+import navi4.zipsa.auth.utils.JwtProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,7 +27,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/zipsa/auth/**", "/login").permitAll()
+                        .requestMatchers("/zipsa/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthorizationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);

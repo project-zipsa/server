@@ -1,10 +1,11 @@
-package navi4.zipsa.auth.security;
+package navi4.zipsa.auth.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import navi4.zipsa.auth.utils.JwtProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,7 +28,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (token != null && jwtProvider.validateToken(token)) {
             String userLoginId = jwtProvider.getUserLoginId(token);
 
-            // 권한 없이 UserName만 인증 처리
+            // 권한 없이 username 만 인증 처리
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(userLoginId, null, List.of());
 
@@ -36,7 +37,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    // Authorization으로 묶여있는 토큰 풀기
     private String resolveToken(HttpServletRequest request) {
         String bearer = request.getHeader("Authorization");
         if (bearer != null && bearer.startsWith("Bearer ")) {

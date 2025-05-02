@@ -1,14 +1,12 @@
-package navi4.zipsa.auth.application;
+package navi4.zipsa.command.user.application;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import navi4.zipsa.auth.domain.User;
-import navi4.zipsa.auth.domain.UserRepository;
-import navi4.zipsa.auth.dto.LoginRequest;
-import navi4.zipsa.auth.dto.LoginResponse;
-import navi4.zipsa.auth.dto.UserCreateRequest;
-import navi4.zipsa.auth.dto.UserCreateResponse;
-import navi4.zipsa.auth.security.JwtProvider;
+import navi4.zipsa.command.user.domain.User;
+import navi4.zipsa.command.user.domain.UserRepository;
+import navi4.zipsa.command.user.dto.LoginRequest;
+import navi4.zipsa.command.user.dto.UserCreateRequest;
+import navi4.zipsa.auth.utils.JwtProvider;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,14 +17,12 @@ public class UserService {
     private final JwtProvider jwtProvider;
 
     @Transactional
-    public UserCreateResponse signUp(UserCreateRequest request) {
+    public void signUp(UserCreateRequest request) {
         validateLoginIdDuplicated(request.loginId());
         //validateUserNameDuplicated(request.name());
 
-        // 서비스 계층에서 도메인 생성?
         User user = User.create(request.loginId(), request.password(), request.userName());
         userRepository.save(user);
-        return UserCreateResponse.from(user);
     }
 
     private void validateLoginIdDuplicated(String loginId){
@@ -41,10 +37,9 @@ public class UserService {
 //        }
 //    }
 
-    public LoginResponse login(LoginRequest request) {
+    public String login(LoginRequest request) {
         User user = validateUser(request);
-        String token = jwtProvider.createToken(user.getLoginId());
-        return new LoginResponse(token);
+        return jwtProvider.createToken(user.getLoginId());
     }
 
     private User validateUser(LoginRequest request) {

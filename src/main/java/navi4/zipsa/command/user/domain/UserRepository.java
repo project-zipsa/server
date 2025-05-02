@@ -1,4 +1,4 @@
-package navi4.zipsa.auth.domain;
+package navi4.zipsa.command.user.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

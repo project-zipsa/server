@@ -1,4 +1,4 @@
-package navi4.zipsa.auth.dto;
+package navi4.zipsa.command.user.dto;
 
 public record LoginRequest(
         String loginId,

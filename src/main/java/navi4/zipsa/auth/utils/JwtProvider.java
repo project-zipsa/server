@@ -1,4 +1,4 @@
-package navi4.zipsa.auth.security;
+package navi4.zipsa.auth.utils;
 
 
 import io.jsonwebtoken.JwtException;
@@ -21,7 +21,7 @@ public class JwtProvider{
 
     private Key key;
 
-    private final long tokenValidationTime = 1000 * 60 * 60 * 24; // 몇 분?
+    private static final long TOKEN_VALIDATION_TIME = 1000 * 60 * 60 * 24;
 
     @PostConstruct
     public void init(){
@@ -29,10 +29,9 @@ public class JwtProvider{
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // 토큰 생성
     public String createToken(String userLoginId){
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + tokenValidationTime);
+        Date expiration = new Date(now.getTime() + TOKEN_VALIDATION_TIME);
 
         return Jwts.builder()
                 .setSubject(userLoginId)
@@ -42,7 +41,6 @@ public class JwtProvider{
                 .compact();
     }
 
-    // 토큰 유효성 검사
     public boolean validateToken(String token){
         try{
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -52,28 +50,10 @@ public class JwtProvider{
         }
     }
 
-    // 토큰에서 사용자 아이디 추출
     public String getUserLoginId(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
