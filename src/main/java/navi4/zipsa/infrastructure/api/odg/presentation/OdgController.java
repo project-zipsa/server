@@ -1,11 +1,13 @@
-package navi4.zipsa.infrastructure.odg.presentation;
+package navi4.zipsa.infrastructure.api.odg.presentation;
 
 import lombok.RequiredArgsConstructor;
-import navi4.zipsa.infrastructure.odg.application.OdgService;
-import navi4.zipsa.infrastructure.odg.dto.OdgDefaultRequest;
+import lombok.extern.slf4j.Slf4j;
+import navi4.zipsa.infrastructure.api.odg.application.OdgService;
+import navi4.zipsa.infrastructure.api.odg.dto.OdgDefaultRequest;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/zipsa/external/odg")
@@ -18,10 +20,8 @@ public class OdgController {
         try{
             return odgService.getBrTitleInfo(request);
         } catch (Exception e){
-            System.out.println(e.getMessage());
+            log.error(e.getMessage(), e);
             return Mono.error(e);
         }
     }
-
-
 }

@@ -1,6 +1,7 @@
-package navi4.zipsa.infrastructure.gpt.application;
+package navi4.zipsa.infrastructure.api.gpt.application;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class GptApiService {
     }
 
     public Mono<String> chat(String userQuestion) {
-        Map<String, Object> body = GptChatRequestBuilder.buildChatRequest(userQuestion);
+        Map<String, Object> body = GptChatRequestBuilder.build(userQuestion);
 
         return webClient
                 .post()
@@ -34,21 +35,14 @@ public class GptApiService {
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(GptChatResponse.class)
-                .map(response -> response.getChoices().getFirst().getMessage().getContent());
+                .map(response -> response.getChoices().getFirst().message().content());
     }
 
     @Getter
-    public static class GptChatResponse {
+    @NoArgsConstructor
+    private static class GptChatResponse {
         private List<Choice> choices;
-
-        @Getter
-        public static class Choice {
-            private Message message;
-        }
-
-        @Getter
-        public static class Message {
-            private String content;
-        }
+        public record Choice(Message message) {}
+        public record Message(String content){}
     }
 }

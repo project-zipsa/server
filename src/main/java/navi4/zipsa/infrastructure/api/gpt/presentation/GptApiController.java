@@ -1,7 +1,7 @@
-package navi4.zipsa.infrastructure.gpt.presentation;
+package navi4.zipsa.infrastructure.api.gpt.presentation;
 
 import lombok.RequiredArgsConstructor;
-import navi4.zipsa.infrastructure.gpt.application.GptApiService;
+import navi4.zipsa.infrastructure.api.gpt.application.GptApiService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,7 +1,7 @@
-package navi4.zipsa.infrastructure.codef.presentation;
+package navi4.zipsa.infrastructure.api.codef.presentation;
 
 import lombok.RequiredArgsConstructor;
-import navi4.zipsa.infrastructure.codef.application.CodefService;
+import navi4.zipsa.infrastructure.api.codef.application.CodefService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

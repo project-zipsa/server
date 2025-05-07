@@ -1,4 +1,4 @@
-package navi4.zipsa.infrastructure.odg.dto;
+package navi4.zipsa.infrastructure.api.odg.dto;
 
 import java.util.Map;
 

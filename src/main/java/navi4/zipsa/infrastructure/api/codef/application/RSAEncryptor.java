@@ -1,4 +1,4 @@
-package navi4.zipsa.infrastructure.codef.application;
+package navi4.zipsa.infrastructure.api.codef.application;
 
 import org.springframework.stereotype.Component;
 
