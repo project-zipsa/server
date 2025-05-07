@@ -16,19 +16,19 @@ public class GlobalExceptionHandler {
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .findFirst()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .orElse("유효하지 않은 요청입니다.");
+                .orElse(ExceptionMessages.INVALID_REQUEST);
 
-        return ResponseEntity.badRequest().body(ErrorResponse.of(message));
+        return ResponseEntity.badRequest().body(new ErrorResponse(message));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(IllegalArgumentException ex) {
-        return ResponseEntity.badRequest().body(ErrorResponse.of(ex.getMessage()));
+        return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        return ResponseEntity.internalServerError().body(ErrorResponse.of("서버 에러. 관리자에게 문의바랍니다."));
+        return ResponseEntity.internalServerError().body(new ErrorResponse(ExceptionMessages.SERVER_ERROR));
     }
 
 }
