@@ -35,7 +35,7 @@ public class GptApiService {
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(GptChatResponse.class)
-                .map(response -> response.getChoices().getFirst().message().content());
+                .map(response -> response.getChoices().get(0).message().content());
     }
 
     @Getter
