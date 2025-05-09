@@ -6,3 +6,6 @@ spring:
       - classpath:zipsa-secrets/application-privacy.yml
   profiles:
     active: privacy
+
+server:
+  port: 31760
