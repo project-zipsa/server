@@ -75,11 +75,3 @@ sourceSets {
 		}
 	}
 }
-
-tasks.register("copySecrets", Copy) {
-	from("../zipsa-secrets")
-	into("${project.layout.buildDirectory.get().asFile}/resources/main/zipsa-secrets")
-}
-tasks.named("processResources") {
-	dependsOn("copySecrets")
-}
