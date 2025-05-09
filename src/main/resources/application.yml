@@ -2,7 +2,7 @@ spring:
   application:
     name: zipsa
   config:
-    import:
-      - classpath:zipsa-secrets/application-privacy.yml
+    import: classpath:zipsa-secrets/application-privacy.yml
   profiles:
     active: privacy
+
