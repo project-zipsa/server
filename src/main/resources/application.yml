@@ -30,7 +30,7 @@ codef:
     id: ${CODEF_ID}
     secret: ${CODEF_SECERET}
     publicKey: ${CODEF_PUBLIC_KEY}
-    encryptionTargetPlain: ${CODEF_ENCRYPTION_TARGER_PLAIN}
+    encryptionTargetPlain: ${CODEF_ENCRYPTION_TARGET_PLAIN}
 
 
 jwt:
