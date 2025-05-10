@@ -56,6 +56,9 @@ dependencies {
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.3.2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// 타임리프
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 }
 
 dependencyManagement {
