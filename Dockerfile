@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
-COPY . .
+COPY src/main/java .
 RUN ./gradlew clean bootJar
 
 FROM eclipse-temurin:17-jre
