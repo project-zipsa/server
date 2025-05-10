@@ -3,6 +3,35 @@ spring:
     name: zipsa
   config:
     import: classpath:zipsa-secrets/application-privacy.yml
-  profiles:
-    active: privacy
+  datasource:
+    url: jdbc:mariadb://svc.sel4.cloudtype.app:${PORT_NUMBER}
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
 
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+
+odg:
+  serviceKey: ${ODG_SERVICE_KEY}
+
+gpt:
+  key: ${GPT_KEY}
+
+codef:
+  client:
+    id: ${CODEF_ID}
+    secret: ${CODEF_SECERET}
+    publicKey: ${CODEF_PUBLIC_KEY}
+    encryptionTargetPlain: ${CODEF_ENCRYPTION_TARGER_PLAIN}
+
+
+jwt:
+  secret: ${JWT_SECRET}
