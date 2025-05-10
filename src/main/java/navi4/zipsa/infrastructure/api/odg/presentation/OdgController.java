@@ -15,7 +15,7 @@ public class OdgController {
 
     private final OdgService odgService;
 
-    @GetMapping("/br-title-info")
+    @PostMapping("/br-title-info")
     public Mono<String> getBrTitleInfo(@RequestBody OdgDefaultRequest request) {
         try{
             return odgService.getBrTitleInfo(request);
