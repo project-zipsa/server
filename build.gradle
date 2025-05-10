@@ -5,6 +5,7 @@ plugins {
 }
 
 bootJar {
+	archiveBaseName = 'zipsa'
 	mainClass = 'navi4.zipsa.ZipsaApplication'
 }
 
