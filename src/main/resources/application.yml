@@ -35,3 +35,7 @@ codef:
 
 jwt:
   secret: ${JWT_SECRET}
+
+server.ssl.key-store: keystore.p12
+server.ssl.key-store-type: PKCS12
+server.ssl.key-store-password: zipsa1234!!
