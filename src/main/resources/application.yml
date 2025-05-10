@@ -1,8 +1,8 @@
 spring:
   application:
     name: zipsa
-  config:
-    import: classpath:zipsa-secrets/application-privacy.yml
+#  config:
+#    import: classpath:zipsa-secrets/application-privacy.yml
   datasource:
     url: jdbc:mariadb://svc.sel4.cloudtype.app:${PORT_NUMBER}
     username: ${DB_USER_NAME}
