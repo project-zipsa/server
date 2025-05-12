@@ -1,0 +1,41 @@
+name: zipsa
+app: java@17
+
+build:
+  type: dockerfile              # ✅ 자동 빌드 대신 Dockerfile 사용
+  dockerfile: Dockerfile        # ✅ 프로젝트 루트에 위치한 파일
+
+run:
+  cmd: java -jar app.jar        # ✅ Dockerfile에서 복사한 .jar 실행
+  ports: 8080                   # ✅ 노출 포트
+  env:
+    - name: PORT_NUMBER
+      value: ${PORT_NUMBER}
+    - name: DB_USER_NAME
+      value: ${DB_USER_NAME}       # 또는 Cloudtype 콘솔에만 설정
+    - name: DB_PASSWORD
+      value: ${DB_PASSWORD}
+    - name: ODG_SERVICE_KEY
+      value: ${ODG_SERVICE_KEY}
+    - name: GPT_KEY
+      value: ${GPT_KEY}
+    - name: CODEF_ID
+      value: ${CODEF_ID}
+    - name: CODEF_SECERET
+      value: ${CODEF_SECERET}
+    - name: CODEF_PUBLIC_KEY
+      value: ${CODEF_PUBLIC_KEY}
+    - name: CODEF_ENCRYPTION_TARGET_PLAIN
+      value: ${CODEF_ENCRYPTION_TARGET_PLAIN}
+    - name: JWT_SECRET
+      value: ${JWT_SECRET}
+
+resources:
+  memory: 0.5
+  spot: true
+
+context:
+  git:
+    url: https://github.com/project-zipsa/zipsa.git
+    branch: main
+  preset: java-springboot
