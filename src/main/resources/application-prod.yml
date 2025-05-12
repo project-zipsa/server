@@ -5,8 +5,8 @@ spring:
   #    active: privacy
   #  config:
   #    import: classpath:zipsa-secrets/application-privacy.yml
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE:default}
+#  profiles:
+#    active: ${SPRING_PROFILES_ACTIVE:default}
   datasource:
     url: jdbc:mariadb://svc.sel4.cloudtype.app:${PORT_NUMBER}
     username: ${DB_USER_NAME}
