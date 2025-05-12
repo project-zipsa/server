@@ -1,21 +1,26 @@
 spring:
   application:
     name: zipsa
-  #  profiles:
-  #    active: privacy
-  #  config:
-  #    import: classpath:zipsa-secrets/application-privacy.yml
+#  datasource:
+#    url: jdbc:mariadb://svc.sel4.cloudtype.app:31760/zipsa
+#    username: root
+#    password: zipsa1234!!
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    profiles:
+#      active: privacy
+#    config:
+#      import: classpath:zipsa-secrets/application-privacy.yml
 #  profiles:
 #    active: ${SPRING_PROFILES_ACTIVE:default}
   datasource:
-    url: jdbc:mariadb://svc.sel4.cloudtype.app:${PORT_NUMBER}/zipsa-db
+    url: jdbc:mariadb://svc.sel4.cloudtype.app:${PORT_NUMBER}/zipsa
     username: ${DB_USER_NAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
