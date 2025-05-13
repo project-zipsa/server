@@ -15,6 +15,7 @@ public class OdgController {
 
     private final OdgService odgService;
 
+    // 표제부
     @PostMapping("/br-title-info")
     public Mono<String> getBrTitleInfo(@RequestBody OdgDefaultRequest request) {
         try{
@@ -25,6 +26,7 @@ public class OdgController {
         }
     }
 
+    // 총괄표제부
     @PostMapping("/br-recap-title-info")
     public Mono<String> getBrRecapTitleInfo(@RequestBody OdgDefaultRequest request) {
         try{
@@ -35,6 +37,7 @@ public class OdgController {
         }
     }
 
+    // 전유부
     @PostMapping("/br-expos-info")
     public Mono<String> getBrExposInfo(@RequestBody OdgDefaultRequest request) {
         try{
@@ -45,6 +48,7 @@ public class OdgController {
         }
     }
 
+    // 지역지구구역
     @PostMapping("/br-jijigu-info")
     public Mono<String> getBrJijiguInfo(@RequestBody OdgDefaultRequest request) {
         try{
