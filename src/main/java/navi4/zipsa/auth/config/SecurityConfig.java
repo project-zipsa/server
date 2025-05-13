@@ -29,7 +29,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/zipsa/auth/**", "/zipsa/external/**", "/").permitAll()
+                        // TODO 수정
+                        .requestMatchers("/zipsa/**", "/zipsa/external/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthorizationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
