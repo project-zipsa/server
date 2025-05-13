@@ -6,6 +6,7 @@ import navi4.zipsa.command.user.application.UserService;
 import navi4.zipsa.command.user.dto.LoginRequest;
 import navi4.zipsa.command.user.dto.LoginResponse;
 import navi4.zipsa.command.user.dto.UserCreateRequest;
+import navi4.zipsa.command.user.dto.UserResponse;
 import navi4.zipsa.common.dto.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<SuccessResponse<UserResponse>> getUserInfo(@RequestParam String loginId) {
+        UserResponse response = userService.getUserByLoginId(loginId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.success(response));
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<Void>> signup(@RequestBody @Valid final UserCreateRequest request) {
