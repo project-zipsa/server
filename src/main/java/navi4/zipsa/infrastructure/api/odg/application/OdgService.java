@@ -24,12 +24,11 @@ public class OdgService {
         this.webClient = builder.baseUrl(ODG_BASE_URL).build();
     }
 
-    public Mono<String> getBrTitleInfo(OdgDefaultRequest request) {
-
+    public Mono<String> getOdgData(OdgDefaultRequest request, String apiUri) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("apis.data.go.kr")
-                .path("/1613000/BldRgstHubService/getBrTitleInfo")
+                .path("/1613000/BldRgstHubService/" + apiUri)
                 .queryParam("bjdongCd", request.bjdongCd())
                 .queryParam("sigunguCd", request.sigunguCd())
                 .queryParam("_type", "json");
