@@ -6,10 +6,7 @@ import navi4.zipsa.command.contract.domain.ContractResult;
 import navi4.zipsa.common.dto.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ public class ContractController {
 
     private final ContractService contractService;
 
-    @GetMapping
+    @GetMapping("/get-by-contract-id")
     public ResponseEntity<SuccessResponse<ContractResult>> getContractsByContractId(@RequestParam Long contractId) {
         ContractResult result = contractService.getContractResultsByContractId(contractId);
         return ResponseEntity
@@ -28,12 +25,12 @@ public class ContractController {
                 .body(SuccessResponse.success(result));
     }
 
-    @GetMapping
-    public ResponseEntity<SuccessResponse<List<ContractResult>>> getContractsByUserId(@RequestParam Long userId) {
-        List<ContractResult> results = contractService.getContractResultsByUserId(userId);
+    @GetMapping("/get-by-user-id")
+    public ResponseEntity<SuccessResponse<ContractResult>> getContractsByUserId(@RequestParam Long userId) {
+        ContractResult result = contractService.getContractResultsByUserId(userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.success(results));
+                .body(SuccessResponse.success(result));
     }
 
 }
