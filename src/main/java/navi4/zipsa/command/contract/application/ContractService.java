@@ -5,7 +5,6 @@ import navi4.zipsa.command.contract.domain.ContractResult;
 import navi4.zipsa.command.contract.domain.ContractResultRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +19,8 @@ public class ContractService {
                 .orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_CONTRACT_RESULT));
     }
 
-    public List<ContractResult> getContractResultsByUserId(Long userId) {
-        return contractResultRepository.findContractResultsByUsersId(userId)
+    public ContractResult getContractResultsByUserId(Long userId) {
+        return contractResultRepository.findContractResultsByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_CONTRACT_RESULT));
     }
-
 }

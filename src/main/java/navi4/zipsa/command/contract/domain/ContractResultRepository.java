@@ -1,11 +1,24 @@
 package navi4.zipsa.command.contract.domain;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ContractResultRepository extends JpaRepository<ContractResult, Long> {
     Optional<ContractResult> findContractResultById(Long contractId);
-    Optional<List<ContractResult>> findContractResultsByUsersId(Long userId);
+    Optional<ContractResult> findContractResultsByUserId(Long userId);
+    boolean existsContractResultByUserId(Long userId);
+
+    @Modifying
+    @Transactional
+    @Query("""
+        UPDATE ContractResult cr
+        SET cr.jeonseContractText = :text
+        WHERE cr.user.id = :userId
+    """)
+    void updateJeonseContractText(@Param("userId") Long userId, @Param("text") String text);
 }

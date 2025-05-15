@@ -20,16 +20,20 @@ public class ContractResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
-    private User users;
+    //TODO: 업데이트
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
 
+    // TODO: 테이블 필드타입 변경
+    //ALTER TABLE your_table_name
+    //MODIFY COLUMN jeonse_contract_text MEDIUMTEXT;
     @Lob
-    @Column(name = "jeonse_contract_text")
+    @Column(name = "jeonse_contract_text", columnDefinition = "MEDIUMTEXT")
     private String jeonseContractText;
 
     @Lob
-    @Column(name = "property_title_text")
+    @Column(name = "property_title_text", columnDefinition = "MEDIUMTEXT")
     private String propertyTitleText;
 
     // 전세계약서 위험 분석 총점
