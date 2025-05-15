@@ -64,6 +64,8 @@ dependencies {
 	// 타임리프
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+	// flyway
+	implementation 'org.flywaydb:flyway-core'
 }
 
 dependencyManagement {
