@@ -6,7 +6,6 @@ spring:
     username: ${DB_USER_NAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,6 +14,8 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MariaDBDialect
+  flyway:
+    enabled: false
 
 odg:
   serviceKey: ${ODG_SERVICE_KEY}
