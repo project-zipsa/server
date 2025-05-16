@@ -30,6 +30,7 @@ public class CodefTokenPublisher {
 
     private final WebClient webClient;
 
+    // TODO 생성자 삭제(다른 클래스들도)
     public CodefTokenPublisher() {
         this.webClient = WebClient.builder()
                 .baseUrl(CODEF_OAUTH_ENDPOINT)

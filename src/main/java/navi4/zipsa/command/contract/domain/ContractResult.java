@@ -20,14 +20,10 @@ public class ContractResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //TODO: 업데이트
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    // TODO: 테이블 필드타입 변경
-    //ALTER TABLE your_table_name
-    //MODIFY COLUMN jeonse_contract_text MEDIUMTEXT;
     @Lob
     @Column(name = "jeonse_contract_text", columnDefinition = "MEDIUMTEXT")
     private String jeonseContractText;
