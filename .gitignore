@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### flyway 스크립트 ###
+!**/src/main/resources/db/migration/
