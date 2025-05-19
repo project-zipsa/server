@@ -6,6 +6,7 @@ import navi4.zipsa.command.JeonseMarketPrice.dto.*;
 import navi4.zipsa.common.utils.CsvReader;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -16,8 +17,17 @@ public class MarketPriceService {
 
     private static final String housingDataFilePath = "src/main/resources/data/housing.csv";
 
-    public MarketPriceResponse calculateMarketPrice(MarketPriceRequest userHousingData){
-        List<String[]> housingData = CsvReader.read(housingDataFilePath);
+    public MarketPriceResponse calculateMarketPrice(MarketPriceRequest userHousingData) throws IOException {
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("data/housing.csv");
+
+        if (inputStream == null) {
+            throw new FileNotFoundException("housing.csv not found in classpath");
+        }
+
+        List<String[]> housingData = CsvReader.read(inputStream);
+
+        //List<String[]> housingData = CsvReader.read(housingDataFilePath);
 
         int totalPrice = 0;
         int cnt = 0;

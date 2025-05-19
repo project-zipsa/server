@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/zipsa/market-price")
@@ -17,7 +19,7 @@ public class MarketPriceController {
     private final MarketPriceService marketPriceService;
 
     @PostMapping("/get-market-price-info")
-    public ResponseEntity<SuccessResponse<MarketPriceResponse>> getMarketPriceInfo(@RequestBody MarketPriceRequest userHousingData) {
+    public ResponseEntity<SuccessResponse<MarketPriceResponse>> getMarketPriceInfo(@RequestBody MarketPriceRequest userHousingData) throws IOException {
         MarketPriceResponse response = marketPriceService.calculateMarketPrice(userHousingData);
         return ResponseEntity
                 .status(HttpStatus.OK)
