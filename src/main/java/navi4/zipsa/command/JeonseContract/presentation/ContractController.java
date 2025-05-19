@@ -1,14 +1,13 @@
-package navi4.zipsa.command.contract.presentation;
+package navi4.zipsa.command.JeonseContract.presentation;
 
 import lombok.AllArgsConstructor;
-import navi4.zipsa.command.contract.application.ContractService;
-import navi4.zipsa.command.contract.domain.ContractResult;
+import navi4.zipsa.command.JeonseContract.application.ContractService;
+import navi4.zipsa.command.JeonseContract.domain.ContractResult;
+import navi4.zipsa.command.JeonseContract.dto.ContractPriceComparisonRequest;
 import navi4.zipsa.common.dto.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -31,6 +30,12 @@ public class ContractController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.success(result));
+    }
+
+    @PostMapping("/get-contract-price-comparison-result")
+    public ResponseEntity<SuccessResponse<ContractResult>> getContractPriceComparisonResult(@RequestBody ContractPriceComparisonRequest request) {
+        //contractService.
+        return null;
     }
 
 }

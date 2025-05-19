@@ -16,46 +16,46 @@ public class OdgController {
     private final OdgService odgService;
 
     // 표제부
-    @PostMapping("/br-title-info")
-    public Mono<String> getBrTitleInfo(@RequestBody OdgDefaultRequest request) {
-        try{
-            return odgService.getOdgData(request, "getBrTitleInfo");
-        } catch (Exception e){
-            log.error(e.getMessage(), e);
-            return Mono.error(e);
-        }
-    }
-
-    // 총괄표제부
-    @PostMapping("/br-recap-title-info")
-    public Mono<String> getBrRecapTitleInfo(@RequestBody OdgDefaultRequest request) {
-        try{
-            return odgService.getOdgData(request, "getBrRecapTitleInfo");
-        } catch (Exception e){
-            log.error(e.getMessage(), e);
-            return Mono.error(e);
-        }
-    }
-
-    // 전유부
-    @PostMapping("/br-expos-info")
-    public Mono<String> getBrExposInfo(@RequestBody OdgDefaultRequest request) {
-        try{
-            return odgService.getOdgData(request, "getBrExposInfo");
-        } catch (Exception e){
-            log.error(e.getMessage(), e);
-            return Mono.error(e);
-        }
-    }
-
-    // 지역지구구역
-    @PostMapping("/br-jijigu-info")
-    public Mono<String> getBrJijiguInfo(@RequestBody OdgDefaultRequest request) {
-        try{
-            return odgService.getOdgData(request, "getBrJijiguInfo");
-        } catch (Exception e){
-            log.error(e.getMessage(), e);
-            return Mono.error(e);
-        }
-    }
+//    @PostMapping("/br-title-info")
+//    public Mono<String> getBrTitleInfo(@RequestBody OdgDefaultRequest request) {
+//        try{
+//            return odgService.getRequiredOdgData(request, "getBrTitleInfo");
+//        } catch (Exception e){
+//            log.error(e.getMessage(), e);
+//            return Mono.error(e);
+//        }
+//    }
+//
+//    // 총괄표제부
+//    @PostMapping("/br-recap-title-info")
+//    public Mono<String> getBrRecapTitleInfo(@RequestBody OdgDefaultRequest request) {
+//        try{
+//            return odgService.getRequiredOdgData(request, "getBrRecapTitleInfo");
+//        } catch (Exception e){
+//            log.error(e.getMessage(), e);
+//            return Mono.error(e);
+//        }
+//    }
+//
+//    // 전유부
+//    @PostMapping("/br-expos-info")
+//    public Mono<String> getBrExposInfo(@RequestBody OdgDefaultRequest request) {
+//        try{
+//            return odgService.getRequiredOdgData(request, "getBrExposInfo");
+//        } catch (Exception e){
+//            log.error(e.getMessage(), e);
+//            return Mono.error(e);
+//        }
+//    }
+//
+//    // 지역지구구역
+//    @PostMapping("/br-jijigu-info")
+//    public Mono<String> getBrJijiguInfo(@RequestBody OdgDefaultRequest request) {
+//        try{
+//            return odgService.getRequiredOdgData(request, "getBrJijiguInfo");
+//        } catch (Exception e){
+//            log.error(e.getMessage(), e);
+//            return Mono.error(e);
+//        }
+//    }
 }

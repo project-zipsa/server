@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import navi4.zipsa.command.contract.domain.ContractResultRepository;
+import navi4.zipsa.command.JeonseContract.domain.ContractResultRepository;
 import navi4.zipsa.infrastructure.api.clova.dto.ClovaOCRImageBody;
 import navi4.zipsa.infrastructure.api.clova.dto.ClovaOCRMessageBody;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,34 +34,35 @@ public class ClovaOCRService {
 
     private final WebClient webClient;
 
-    public String extractTextFromImageFile(MultipartFile imageFile) {
+    public String extractTextFromFile(MultipartFile rawFile) {
         try {
-            // 파일 리소스
-            ByteArrayResource fileAsResource = new ByteArrayResource(imageFile.getBytes()) {
+            List<ClovaOCRImageBody> files = new ArrayList<>();
+            MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
+
+            // 파일 리소스 설정
+            ByteArrayResource fileAsResource = new ByteArrayResource(rawFile.getBytes()) {
                 @Override
                 public String getFilename() {
-                    return imageFile.getOriginalFilename();
+                    return rawFile.getOriginalFilename();
                 }
             };
+            formData.add("file", fileAsResource);
 
-            // message JSON
-            String extension = imageFile.getOriginalFilename()
-                    .substring(imageFile.getOriginalFilename().lastIndexOf('.') + 1);
-            List<ClovaOCRImageBody> images = List.of(
-                    new ClovaOCRImageBody(extension, imageFile.getOriginalFilename())
-            );
+            // 확장자 추출
+            String extension = rawFile.getOriginalFilename()
+                    .substring(rawFile.getOriginalFilename().lastIndexOf('.') + 1);
 
-            // TODO: 매직넘버 상수화
+            // OCR 이미지 바디 생성
+            files.add(new ClovaOCRImageBody(extension, rawFile.getOriginalFilename()));
+
+            // 메시지 바디 생성
             ClovaOCRMessageBody messageBody = new ClovaOCRMessageBody(
-                    "V2", "1234", System.currentTimeMillis(), "ko", images
+                    "V2", "1234", System.currentTimeMillis(), "ko", files
             );
 
+            // JSON 메시지 추가
             ObjectMapper objectMapper = new ObjectMapper();
             String messageJson = objectMapper.writeValueAsString(messageBody);
-
-            // form-data 생성
-            MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
-            formData.add("file", fileAsResource);
             formData.add("message", messageJson);
 
             // 요청
@@ -74,9 +76,10 @@ public class ClovaOCRService {
                     .block();
 
         } catch (Exception e) {
-            throw new IllegalArgumentException("[이미지 텍스트 추출 요청 실패]: " + e.getMessage(), e);
+            throw new IllegalArgumentException("[텍스트 추출 요청 실패]: " + e.getMessage(), e);
         }
     }
+
 
     public String extractTextOnly(String clovaResponseJson){
         try{
@@ -105,6 +108,13 @@ public class ClovaOCRService {
             throw new IllegalArgumentException("해당 유저의 계약 결과가 존재하지 않습니다.");
         }
         contractResultRepository.updateJeonseContractText(userId, text);
+    }
+
+    public void updatePropertyTitleText(Long userId, String text){
+        if (!contractResultRepository.existsContractResultByUserId(userId)){
+            throw new IllegalArgumentException("해당 유저의 계약 결과가 존재하지 않습니다.");
+        }
+        contractResultRepository.updatePropertyTitleText(userId, text);
     }
 }
 

@@ -13,7 +13,8 @@ public class GptChatRequestBuilder {
                                 "role", "user",
                                 "content", userQuestion
                         )
-                )
+                ),
+                "temperature", 0.0
         );
     }
 }

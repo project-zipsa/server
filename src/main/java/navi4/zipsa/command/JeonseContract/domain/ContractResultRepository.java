@@ -1,4 +1,4 @@
-package navi4.zipsa.command.contract.domain;
+package navi4.zipsa.command.JeonseContract.domain;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,5 +30,15 @@ public interface ContractResultRepository extends JpaRepository<ContractResult, 
         WHERE cr.user.id = :userId
     """)
     void updateJeonseContractRiskScore(@Param("userId") Long userId, @Param("riskScore") double riskScore);
+
+    @Modifying
+    @Transactional
+    @Query("""
+        UPDATE ContractResult cr
+        SET cr.propertyTitleText = :text
+        WHERE cr.user.id = :userId
+    """
+    )
+    void updatePropertyTitleText(@Param("userId") Long userId, @Param("text") String text);
 
 }

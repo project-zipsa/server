@@ -1,4 +1,4 @@
-package navi4.zipsa.command.contract.domain;
+package navi4.zipsa.command.JeonseContract.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,7 +7,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Entity
@@ -42,51 +41,15 @@ public class ContractResult {
 
     // 위험도 총점
     @Column(name = "total_risk_score")
-    private int totalRiskScore = 0;
+    private Integer totalRiskScore = 0;
 
-    // 계약 시작일
-    @Column(name = "contract_start_date")
-    private LocalDateTime contractStartDate;
+    // 전세계약서 JSON
+    @Column(name = "jeonse_contract_data", columnDefinition = "TEXT")
+    private String jeonseContractData;
 
-    // 계약 종료일
-    @Column(name = "contract_end_date")
-    private LocalDateTime contractEndDate;
-
-    // 거래가
-    @Column(name = "contract_price")
-    private BigInteger contractPrice;
-
-    // 보증금
-    @Column(name = "deposit")
-    private BigInteger deposit;
-
-    // 주소 전체
-    @Column(name = "total_address")
-    private String totalAddress;
-
-    // 시
-    @Column(name = "si")
-    private String si;
-
-    // 구
-    @Column(name = "gu")
-    private String gu;
-
-    // 동
-    @Column(name = "dong")
-    private String dong;
-
-    // 상세
-    @Column(name = "detail_address")
-    private String detailAddress;
-
-    // 시군구 코드
-    @Column(name = "sigungu_code")
-    private String sigunguCode;
-
-    // 번지동 코드
-    @Column(name = "bunjidong_code")
-    private String bunjidongCode;
+    // 등기부등본 JSON
+    @Column(name = "property_title_data", columnDefinition = "TEXT")
+    private String propertyTitleData;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
@@ -95,5 +58,4 @@ public class ContractResult {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
 }
