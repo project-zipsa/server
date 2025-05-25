@@ -1,9 +1,11 @@
 package navi4.zipsa.infrastructure.api.clova.application;
 
 import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import navi4.zipsa.command.JeonseContract.domain.ContractResultRepository;
 import navi4.zipsa.infrastructure.api.clova.dto.ClovaOCRImageBody;
 import navi4.zipsa.infrastructure.api.clova.dto.ClovaOCRMessageBody;
@@ -20,11 +22,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClovaOCRService {
 
     private final ContractResultRepository contractResultRepository;
+    private final ObjectMapper objectMapper;
 
     @Value("${clova.invokeUrl}")
     private String clovaInvokeUrl;
@@ -61,7 +65,7 @@ public class ClovaOCRService {
             );
 
             // JSON 메시지 추가
-            ObjectMapper objectMapper = new ObjectMapper();
+            // ObjectMapper objectMapper = new ObjectMapper();
             String messageJson = objectMapper.writeValueAsString(messageBody);
             formData.add("message", messageJson);
 
@@ -83,7 +87,7 @@ public class ClovaOCRService {
 
     public String extractTextOnly(String clovaResponseJson){
         try{
-            ObjectMapper objectMapper = new ObjectMapper();
+            //ObjectMapper objectMapper = new ObjectMapper();
             JsonNode root = objectMapper.readTree(clovaResponseJson);
 
             JsonNode fields = root
@@ -103,18 +107,42 @@ public class ClovaOCRService {
         }
     }
 
-    public void updateJeonseContractText(Long userId, String text){
+    public void updateJeonseContractJson(Long userId, String text){
         if (!contractResultRepository.existsContractResultByUserId(userId)){
             throw new IllegalArgumentException("해당 유저의 계약 결과가 존재하지 않습니다.");
         }
-        contractResultRepository.updateJeonseContractText(userId, text);
+
+        // JSON 데이터 추출
+        try{
+            JsonNode rootNode = objectMapper.readTree(text);
+            JsonNode dataNode = rootNode.path("data");
+            // dataNode가 null인 경우 처리 -> 이 경우 안 만들거라 나중에 없애도 됨
+            if (dataNode.isMissingNode()){
+                throw new IllegalArgumentException("전세계약서의 data 필드 존재하지 않음");
+            }
+            contractResultRepository.updateJeonseContractJson(userId, dataNode.toPrettyString());
+        } catch (JsonProcessingException e){
+            throw new IllegalArgumentException("전세계약서 데이터 JSON 파싱 에러" + e.getMessage(), e);
+        }
     }
 
-    public void updatePropertyTitleText(Long userId, String text){
+    public void updatePropertyTitleJson(Long userId, String text){
         if (!contractResultRepository.existsContractResultByUserId(userId)){
             throw new IllegalArgumentException("해당 유저의 계약 결과가 존재하지 않습니다.");
         }
-        contractResultRepository.updatePropertyTitleText(userId, text);
+
+        // JSON 데이터 추출
+        try{
+            JsonNode rootNode = objectMapper.readTree(text);
+            JsonNode dataNode = rootNode.path("data");
+
+            if (dataNode.isMissingNode()){
+                throw new IllegalArgumentException("등기부등본의 data 필드 존재하지 않음");
+            }
+            contractResultRepository.updatePropertyTitleJson(userId, dataNode.toPrettyString());
+        } catch (JsonProcessingException e){
+            throw new IllegalArgumentException("등기부등본 데이터 JSON 파싱 에러" + e.getMessage(), e);
+        }
     }
 }
 
