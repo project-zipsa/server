@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/zipsa/external/gpt")
+@RequestMapping("/external/gpt")
 public class GptApiController {
 
     private final GptApiService gptApiService;

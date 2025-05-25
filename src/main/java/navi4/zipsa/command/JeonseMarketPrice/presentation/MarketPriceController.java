@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/zipsa/market-price")
+@RequestMapping("/market-price")
 public class MarketPriceController {
 
     private final MarketPriceService marketPriceService;

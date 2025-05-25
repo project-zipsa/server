@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/zipsa/contract")
+@RequestMapping("/contract")
 public class ContractController {
 
     private final ContractService contractService;

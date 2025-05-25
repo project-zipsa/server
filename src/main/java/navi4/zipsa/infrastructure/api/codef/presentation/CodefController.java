@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/zipsa/external/codef")
+@RequestMapping("/external/codef")
 public class CodefController {
 
     private final CodefService apiService;
