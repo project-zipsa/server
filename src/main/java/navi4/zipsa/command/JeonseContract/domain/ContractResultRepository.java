@@ -17,10 +17,10 @@ public interface ContractResultRepository extends JpaRepository<ContractResult, 
     @Transactional
     @Query("""
         UPDATE ContractResult cr
-        SET cr.jeonseContractText = :text
+        SET cr.jeonseContractJson = :text
         WHERE cr.user.id = :userId
     """)
-    void updateJeonseContractText(@Param("userId") Long userId, @Param("text") String text);
+    void updateJeonseContractJson(@Param("userId") Long userId, @Param("text") String text);
 
     @Modifying
     @Transactional
@@ -35,10 +35,10 @@ public interface ContractResultRepository extends JpaRepository<ContractResult, 
     @Transactional
     @Query("""
         UPDATE ContractResult cr
-        SET cr.propertyTitleText = :text
+        SET cr.propertyTitleJson = :text
         WHERE cr.user.id = :userId
     """
     )
-    void updatePropertyTitleText(@Param("userId") Long userId, @Param("text") String text);
+    void updatePropertyTitleJson(@Param("userId") Long userId, @Param("text") String text);
 
 }

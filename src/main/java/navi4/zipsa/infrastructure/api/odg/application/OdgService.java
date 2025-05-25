@@ -30,7 +30,7 @@ public class OdgService {
         this.webClient = builder.baseUrl(ODG_BASE_URL).build();
     }
 
-    public Mono<TotalBrInfoRequest> getTotalBrInfoRequest(OdgDefaultRequest request) throws Exception {
+    public Mono<TotalBrInfoRequest> getTotalBrInfoRequest(OdgDefaultRequest request) {
         Mono<BrTitleInfoRequest> titleMono = getRequiredBrTitleInfo(request);
         Mono<BrExposInfoRequest> exposMono = getRequiredBrExposInfo(request);
         Mono<BrJijiguInfoRequest> jijiguMono = getRequiredBrJijiguInfo(request);
@@ -47,13 +47,6 @@ public class OdgService {
         Mono<String> response = requestOdgData(request, "getBrTitleInfo");
         return toBrTitleInfoRequest(response);
     }
-
-    // 총괄표제부 사용 X?
-//    public Mono<String> getRequiredBrRecapTitleInfo(OdgDefaultRequest request) {
-//        Mono<String> response = requestOdgData(request, "getBrRecapTitleInfo");
-//        Mono<>  = (response);
-//        return null;
-//    }
 
     // 전유부
     private Mono<BrExposInfoRequest> getRequiredBrExposInfo(OdgDefaultRequest request) {
