@@ -23,15 +23,12 @@ public class ContractResult {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    // 전세계약서 위험 분석 총점 -> 삭제해도 됨
     @Column(name = "jeonse_contract_risk_score")
     private Integer jeonseContractRiskScore = 0;
 
-    // 전세계약서 JSON
     @Column(name = "jeonse_contract_json", columnDefinition = "TEXT")
     private String jeonseContractJson;
 
-    // 등기부등본 JSON
     @Column(name = "property_title_json", columnDefinition = "TEXT")
     private String propertyTitleJson;
 

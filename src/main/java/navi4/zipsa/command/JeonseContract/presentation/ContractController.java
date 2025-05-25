@@ -35,13 +35,6 @@ public class ContractController {
                 .body(SuccessResponse.success(result));
     }
 
-//    @PostMapping("/get-contract-price-comparison-result")
-//    public ResponseEntity<SuccessResponse<ContractResult>> getContractPriceComparisonResult(@RequestBody ContractPriceComparisonRequest request) {
-//        //contractService.
-//        return null;
-//    }
-
-    // 전체
     @PostMapping("/total-contract-analysis")
     public Mono<String> analyzeContract(
             @RequestParam Long userId,

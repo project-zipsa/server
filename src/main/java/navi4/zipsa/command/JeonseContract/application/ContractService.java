@@ -1,5 +1,6 @@
 package navi4.zipsa.command.JeonseContract.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -33,17 +34,7 @@ public class ContractService {
                 .orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_CONTRACT_RESULT));
     }
 
-    // jeonseContractRiskScore 업데이트
-    public void extractContractRiskScore(Long userId, String contractAnalysisResponse){
-        try{
-            JsonNode root = objectMapper.readTree(contractAnalysisResponse);
-            String score = root.path("전체 위험도 점수").asText().trim();
-            contractResultRepository.updateJeonseContractRiskScore(userId, Integer.parseInt(score));
-        } catch (Exception e){
-            throw new IllegalArgumentException("전세계약서 위험도 점수 추출 오류" + e);
-        }
-    }
-
+    // TODO: 동기 - 비동기 처리 충돌 해결
     public Mono<String> analyzeTotalRisk(Long userId, Mono<TotalBrInfoRequest> brInfoMono) {
         ContractResult contractResult = contractResultRepository.findContractResultsByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_CONTRACT_RESULT));
@@ -52,13 +43,20 @@ public class ContractService {
         String propertyTitleJson = contractResult.getPropertyTitleJson();
 
         return brInfoMono.flatMap(brInfo -> {
-            String prompt = "\n[전세계약서 텍스트]:\n" + jeonseContractJson +
-                    "\n[등기부등본 텍스트]:\n" + propertyTitleJson +
-                    "\n[건축물대장 데이터]:\n" + brInfo.toString() +
-                    TotalContractAnalysisTemplate.REQUEST_MESSAGE +
-                    TotalContractAnalysisTemplate.ANALYSIS_DETAIL +
-                    TotalContractAnalysisTemplate.PRINT_FORMAT;
-            return gptApiService.chat(prompt);
+            try {
+                String buildingRegisterJson = objectMapper.writeValueAsString(brInfo);
+                contractResultRepository.updateBuildingRegisterJson(userId, buildingRegisterJson);
+
+                String prompt = "\n[전세계약서 텍스트]:\n" + jeonseContractJson +
+                        "\n[등기부등본 텍스트]:\n" + propertyTitleJson +
+                        "\n[건축물대장 데이터]:\n" + buildingRegisterJson +
+                        TotalContractAnalysisTemplate.REQUEST_MESSAGE +
+                        TotalContractAnalysisTemplate.ANALYSIS_DETAIL +
+                        TotalContractAnalysisTemplate.PRINT_FORMAT;
+                return gptApiService.chat(prompt);
+            } catch (JsonProcessingException e) {
+                return Mono.error(new IllegalArgumentException("건축물대장 JSON을 String으로 반환저장하는 로직 오류" + e.getMessage() + e));
+            }
         });
     }
 

@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Base64;
 
+// TODO: 이거 왜 만들었었지
 public class ImageExtractor {
 
     public static Base64Image extractImageToBase64(MultipartFile imageFile) {

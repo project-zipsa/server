@@ -26,19 +26,20 @@ public interface ContractResultRepository extends JpaRepository<ContractResult, 
     @Transactional
     @Query("""
         UPDATE ContractResult cr
-        SET cr.jeonseContractRiskScore = :riskScore
-        WHERE cr.user.id = :userId
-    """)
-    void updateJeonseContractRiskScore(@Param("userId") Long userId, @Param("riskScore") double riskScore);
-
-    @Modifying
-    @Transactional
-    @Query("""
-        UPDATE ContractResult cr
         SET cr.propertyTitleJson = :text
         WHERE cr.user.id = :userId
     """
     )
     void updatePropertyTitleJson(@Param("userId") Long userId, @Param("text") String text);
+
+
+    @Modifying
+    @Transactional
+    @Query("""
+        UPDATE ContractResult cr
+        SET cr.buildingRegisterJson = :text
+        WHERE cr.user.id = :userId
+    """)
+    void updateBuildingRegisterJson(@Param("userId") Long userId, @Param("text") String text);
 
 }

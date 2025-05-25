@@ -14,20 +14,21 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.util.function.Function;
 
-@Service
 @Slf4j
+@Service
 public class OdgService {
 
-    private final WebClient webClient;
     private static final String ODG_BASE_URL = "https://apis.data.go.kr/1613000/BldRgstHubService";
+
+    private final WebClient webClient;
+    private final ObjectMapper objectMapper;
 
     @Value("${odg.serviceKey}")
     private String ODG_SERVICE_KEY;
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
     public OdgService(WebClient.Builder builder) {
         this.webClient = builder.baseUrl(ODG_BASE_URL).build();
+        this.objectMapper = new ObjectMapper();
     }
 
     public Mono<TotalBrInfoRequest> getTotalBrInfoRequest(OdgDefaultRequest request) {

@@ -28,6 +28,7 @@ import java.util.List;
 public class ClovaOCRService {
 
     private final ContractResultRepository contractResultRepository;
+    private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
     @Value("${clova.invokeUrl}")
@@ -36,14 +37,12 @@ public class ClovaOCRService {
     @Value("${clova.secretKey}")
     private String clovaSecretKey;
 
-    private final WebClient webClient;
 
     public String extractTextFromFile(MultipartFile rawFile) {
         try {
             List<ClovaOCRImageBody> files = new ArrayList<>();
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
 
-            // 파일 리소스 설정
             ByteArrayResource fileAsResource = new ByteArrayResource(rawFile.getBytes()) {
                 @Override
                 public String getFilename() {
@@ -52,24 +51,17 @@ public class ClovaOCRService {
             };
             formData.add("file", fileAsResource);
 
-            // 확장자 추출
             String extension = rawFile.getOriginalFilename()
                     .substring(rawFile.getOriginalFilename().lastIndexOf('.') + 1);
 
-            // OCR 이미지 바디 생성
             files.add(new ClovaOCRImageBody(extension, rawFile.getOriginalFilename()));
-
-            // 메시지 바디 생성
             ClovaOCRMessageBody messageBody = new ClovaOCRMessageBody(
                     "V2", "1234", System.currentTimeMillis(), "ko", files
             );
 
-            // JSON 메시지 추가
-            // ObjectMapper objectMapper = new ObjectMapper();
             String messageJson = objectMapper.writeValueAsString(messageBody);
             formData.add("message", messageJson);
 
-            // 요청
             return webClient.post()
                     .uri(clovaInvokeUrl)
                     .header("X-OCR-SECRET", clovaSecretKey)
@@ -87,7 +79,6 @@ public class ClovaOCRService {
 
     public String extractTextOnly(String clovaResponseJson){
         try{
-            //ObjectMapper objectMapper = new ObjectMapper();
             JsonNode root = objectMapper.readTree(clovaResponseJson);
 
             JsonNode fields = root
@@ -116,7 +107,6 @@ public class ClovaOCRService {
         try{
             JsonNode rootNode = objectMapper.readTree(text);
             JsonNode dataNode = rootNode.path("data");
-            // dataNode가 null인 경우 처리 -> 이 경우 안 만들거라 나중에 없애도 됨
             if (dataNode.isMissingNode()){
                 throw new IllegalArgumentException("전세계약서의 data 필드 존재하지 않음");
             }
@@ -131,7 +121,6 @@ public class ClovaOCRService {
             throw new IllegalArgumentException("해당 유저의 계약 결과가 존재하지 않습니다.");
         }
 
-        // JSON 데이터 추출
         try{
             JsonNode rootNode = objectMapper.readTree(text);
             JsonNode dataNode = rootNode.path("data");
