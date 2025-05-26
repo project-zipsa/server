@@ -50,10 +50,10 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/zipsa/**").permitAll()
+                        .requestMatchers("/zipsa/auth/**").permitAll() // 로그인, 회원가입 접근 허용
+                        .requestMatchers("/zipsa/contracts/total-analysis").permitAll() // 전체문서분석 접근 허용
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthorizationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
