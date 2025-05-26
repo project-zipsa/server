@@ -24,7 +24,4 @@ public class CodefController {
     public String publishRsaPassword() throws Exception {
         return apiService.getCodefRSAPassword();
     }
-
-
-
 }

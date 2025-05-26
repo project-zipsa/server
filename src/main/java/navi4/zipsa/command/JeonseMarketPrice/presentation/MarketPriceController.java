@@ -18,7 +18,7 @@ public class MarketPriceController {
 
     private final MarketPriceService marketPriceService;
 
-    @PostMapping("/get-market-price-info")
+    @PostMapping("/analysis")
     public ResponseEntity<SuccessResponse<MarketPriceResponse>> getMarketPriceInfo(@RequestBody MarketPriceRequest userHousingData) throws IOException {
         MarketPriceResponse response = marketPriceService.calculateMarketPrice(userHousingData);
         return ResponseEntity

@@ -40,4 +40,6 @@ public class UserController {
         String token = userService.login(request);
         return ResponseEntity.ok(SuccessResponse.success("로그인에 성공했습니다.", new LoginResponse(token)));
     }
+
+    // TODO: 회원탈퇴, 로그아웃
 }

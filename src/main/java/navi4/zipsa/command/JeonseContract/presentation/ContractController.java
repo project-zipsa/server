@@ -13,21 +13,13 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/contract")
+@RequestMapping("/contracts")
 public class ContractController {
 
     private final ContractService contractService;
     private final OdgService odgService;
 
-    @GetMapping("/get-by-contract-id")
-    public ResponseEntity<SuccessResponse<ContractResult>> getContractsByContractId(@RequestParam Long contractId) {
-        ContractResult result = contractService.getContractResultsByContractId(contractId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(SuccessResponse.success(result));
-    }
-
-    @GetMapping("/get-by-user-id")
+    @GetMapping
     public ResponseEntity<SuccessResponse<ContractResult>> getContractsByUserId(@RequestParam Long userId) {
         ContractResult result = contractService.getContractResultsByUserId(userId);
         return ResponseEntity
@@ -35,7 +27,15 @@ public class ContractController {
                 .body(SuccessResponse.success(result));
     }
 
-    @PostMapping("/total-contract-analysis")
+    @GetMapping("/{contractId}")
+    public ResponseEntity<SuccessResponse<ContractResult>> getContractsByContractId(@RequestParam Long contractId) {
+        ContractResult result = contractService.getContractResultsByContractId(contractId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.success(result));
+    }
+
+    @PostMapping("/total-analysis")
     public Mono<String> analyzeContract(
             @RequestParam Long userId,
             @ModelAttribute OdgDefaultRequest odgDefaultRequest) {

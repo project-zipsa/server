@@ -24,7 +24,7 @@ public class ClovaController {
     private final GptApiService gptApiService;
     private final ObjectMapper objectMapper;
 
-    @PostMapping("/upload-lease-contract")
+    @PostMapping("/lease-contracts")
     public ResponseEntity<SuccessResponse<Object>> uploadLeaseContractFile(
             @RequestParam Long userId,
             @RequestParam MultipartFile leaseContractFile) {
@@ -52,7 +52,7 @@ public class ClovaController {
     }
 
     // 등기부등본 업로드
-    @PostMapping("/upload-land-title-file")
+    @PostMapping("/land-titles")
     public ResponseEntity<SuccessResponse<Object>> uploadLandTitleFile(
             @RequestParam Long userId,
             @RequestParam MultipartFile[] landTitles
