@@ -79,11 +79,9 @@
             │   │   └── presentation
             │   │       └── CodefController.java
             │   ├── gpt
-            │   │   ├── application
-            │   │   │   ├── GptApiService.java
-            │   │   │   └── GptChatRequestBuilder.java
-            │   │   └── presentation
-            │   │       └── GptApiController.java
+            │   │   └── application
+            │   │       ├── GptApiService.java
+            │   │       └── GptChatRequestBuilder.java
             │   └── odg
             │       ├── application
             │       │   └── OdgService.java
@@ -94,6 +92,5 @@
             │           ├── OdgDefaultRequest.java
             │           └── TotalBrInfoRequest.java
             └── exception
-                └── ApiExceptionMessages.java
-
+                └── ErrorMessage.java
 ```
