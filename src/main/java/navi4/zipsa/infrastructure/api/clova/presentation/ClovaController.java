@@ -27,9 +27,9 @@ public class ClovaController {
     @PostMapping("/lease-contracts")
     public ResponseEntity<SuccessResponse<Object>> uploadLeaseContractFile(
             @RequestParam Long userId,
-            @RequestParam MultipartFile leaseContractFile) {
+            @RequestParam MultipartFile leaseContractFiles) {
 
-        String extractedText = clovaOCRService.extractTextFromFile(leaseContractFile);
+        String extractedText = clovaOCRService.extractTextFromFile(leaseContractFiles);
         String text = clovaOCRService.extractTextOnly(extractedText);
 
         String contractAnalysisResponse = gptApiService.chat(
