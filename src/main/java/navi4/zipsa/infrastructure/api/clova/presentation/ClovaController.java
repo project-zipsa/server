@@ -27,13 +27,18 @@ public class ClovaController {
     @PostMapping("/lease-contracts")
     public ResponseEntity<SuccessResponse<Object>> uploadLeaseContractFile(
             @RequestParam Long userId,
-            @RequestParam MultipartFile leaseContractFiles) {
-
-        String extractedText = clovaOCRService.extractTextFromFile(leaseContractFiles);
-        String text = clovaOCRService.extractTextOnly(extractedText);
+            @RequestParam MultipartFile[] leaseContractFiles
+    ){
+        StringBuilder totalText = new StringBuilder();
+        for (MultipartFile leaseContractFile : leaseContractFiles) {
+            String extractedText = clovaOCRService.extractTextFromFile(leaseContractFile);
+            totalText.append(clovaOCRService.extractTextOnly(extractedText));
+        }
+        //String extractedText = clovaOCRService.extractTextFromFile(leaseContractFiles);
+        //String text = clovaOCRService.extractTextOnly(extractedText);
 
         String contractAnalysisResponse = gptApiService.chat(
-                text
+                totalText
                         + LeaseContractAnalysisTemplate.REQUEST_DETAIL
                         + LeaseContractAnalysisTemplate.RESPONSE_CONDITION
                         + LeaseContractAnalysisTemplate.ANALYSIS_TEMPLATE).block();
@@ -51,7 +56,6 @@ public class ClovaController {
                 .body(SuccessResponse.success("전세계약서 추출 및 저장 성공", parsedJson));
     }
 
-    // 등기부등본 업로드
     @PostMapping("/land-titles")
     public ResponseEntity<SuccessResponse<Object>> uploadLandTitleFile(
             @RequestParam Long userId,
@@ -64,7 +68,7 @@ public class ClovaController {
         }
 
         String contractAnalysisResponse = gptApiService.chat(
-                String.valueOf(totalText)
+                totalText
                         + PropertyTitleExtractionTemplate.REQUEST_MESSAGE
                         + PropertyTitleExtractionTemplate.TEMPLATE).block();
 
