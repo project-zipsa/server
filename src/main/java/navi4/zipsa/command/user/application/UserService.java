@@ -28,6 +28,7 @@ public class UserService {
         userRepository.flush();
         ContractResult contractResult  = ContractResult.create(user);
         contractResultRepository.save(contractResult);
+        contractResultRepository.flush();
     }
 
     public String login(LoginRequest request) {

@@ -100,9 +100,8 @@ public class ClovaOCRService {
 
     public void updateJeonseContractJson(Long userId, String text){
         if (!contractResultRepository.existsContractResultByUserId(userId)){
-            throw new IllegalArgumentException("해당 유저의 계약 결과가 존재하지 않습니다.");
+            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "해당 유저의 계약 결과가 존재하지 않습니다.");
         }
-
         try{
             JsonNode rootNode = objectMapper.readTree(text);
             JsonNode dataNode = rootNode.path("data");
@@ -111,28 +110,28 @@ public class ClovaOCRService {
                 throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "전세계약서 분석 오류");
             }
             contractResultRepository.updateJeonseContractJson(userId, dataNode.toPrettyString());
-        } catch (JsonProcessingException e){
-            log.error("전세계약서 데이터 JSON 파싱 에러" + e.getMessage() + e);
-            throw new IllegalArgumentException("전세계약서 분석 오류");
+        } catch (Exception e){
+            log.error("전세계약서 데이터 JSON 파싱 에러 등 에러 발생" + e.getMessage() + e);
+            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "전세계약서 분석 오류");
         }
     }
 
     public void updatePropertyTitleJson(Long userId, String text){
         if (!contractResultRepository.existsContractResultByUserId(userId)){
-            throw new IllegalArgumentException("해당 유저의 계약 결과가 존재하지 않습니다.");
+            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "해당 유저의 계약 결과가 존재하지 않습니다.");
         }
 
         try{
             JsonNode rootNode = objectMapper.readTree(text);
             JsonNode dataNode = rootNode.path("data");
-
             if (dataNode.isMissingNode()){
-                throw new IllegalArgumentException("등기부등본의 data 필드 존재하지 않음");
+                log.error("등기부등본의 data 필드 존재하지 않음");
+                throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "등기부등본 분석 오류");
             }
             contractResultRepository.updatePropertyTitleJson(userId, dataNode.toPrettyString());
         } catch (JsonProcessingException e){
-            throw new IllegalArgumentException("등기부등본 데이터 JSON 파싱 에러" + e.getMessage(), e);
+            log.error("등기부등본 데이터 JSON 파싱 에러" + e.getMessage() + e);
+            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "등기부등본 데이터 JSON 파싱 에러");
         }
     }
 }
-
