@@ -22,6 +22,7 @@ odg:
 
 gpt:
   key: ${GPT_KEY}
+  url: ${GPT_URL}
 
 codef:
   client:
@@ -41,3 +42,9 @@ server:
   port: 8080
   servlet:
     context-path: /zipsa
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.cors: TRACE
+    org.apache.coyote.http11: DEBUG
