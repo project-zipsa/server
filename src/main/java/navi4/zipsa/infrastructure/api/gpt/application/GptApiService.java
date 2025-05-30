@@ -16,28 +16,28 @@ import java.util.Map;
 public class GptApiService {
 
     private final WebClient webClient;
-    private static final String GPT_API_BASE_URL = "https://api.openai.com/v1/chat/completions";
 
-    @Value("${gpt.key}")
-    private String GPT_API_KEY;
-
-    public GptApiService(WebClient.Builder builder) {
-        this.webClient = builder.baseUrl(GPT_API_BASE_URL).build();
+    public GptApiService(WebClient.Builder builder,
+                         @Value("${gpt.url}") String gptApiBaseUrl,
+                         @Value("gpt.key") String gptApiKey) {
+        this.webClient = builder
+                .baseUrl(gptApiBaseUrl)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + gptApiKey)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
     }
 
     public Mono<String> chat(String userQuestion) {
-        Map<String, Object> body = GptChatRequestBuilder.build(userQuestion);
-
+        Map<String, Object> body = GptChatRequestBuilder.build(userQuestion); // TODO: 타입안정성 보장 - dto로 받기
         return webClient
                 .post()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + GPT_API_KEY)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(GptChatResponse.class)
                 .map(response -> response.getChoices().get(0).message().content());
     }
 
+    // TODO: NPE 검사
     @Getter
     @NoArgsConstructor
     private static class GptChatResponse {

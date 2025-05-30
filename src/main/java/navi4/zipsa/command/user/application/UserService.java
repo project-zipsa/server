@@ -2,12 +2,14 @@ package navi4.zipsa.command.user.application;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import navi4.zipsa.command.JeonseContract.domain.ContractResult;
+import navi4.zipsa.command.JeonseContract.domain.ContractResultRepository;
 import navi4.zipsa.command.user.domain.User;
 import navi4.zipsa.command.user.domain.UserRepository;
 import navi4.zipsa.command.user.dto.LoginRequest;
-import navi4.zipsa.command.user.dto.UserCreateRequest;
+import navi4.zipsa.command.user.dto.SignupRequest;
 import navi4.zipsa.auth.utils.JwtProvider;
-import navi4.zipsa.command.user.dto.UserResponse;
+import navi4.zipsa.command.user.dto.SignupResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,13 +17,16 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ContractResultRepository contractResultRepository;
     private final JwtProvider jwtProvider;
 
     @Transactional
-    public void signUp(UserCreateRequest request) {
+    public void signUp(SignupRequest request) {
         validateLoginIdDuplicated(request.loginId());
         User user = User.create(request.loginId(), request.password(), request.userName());
+        ContractResult contractResult  = ContractResult.create(user);
         userRepository.save(user);
+        contractResultRepository.save(contractResult);
     }
 
     public String login(LoginRequest request) {
@@ -29,8 +34,8 @@ public class UserService {
         return jwtProvider.createToken(user.getLoginId());
     }
 
-    public UserResponse getUserByLoginId(String loginId) {
-        return UserResponse.from(validateUserLoginId(loginId));
+    public SignupResponse getUserByLoginId(String loginId) {
+        return SignupResponse.from(validateUserLoginId(loginId));
     }
 
     private void validateLoginIdDuplicated(String loginId){

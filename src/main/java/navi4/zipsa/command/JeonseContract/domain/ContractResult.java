@@ -1,7 +1,10 @@
 package navi4.zipsa.command.JeonseContract.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import navi4.zipsa.command.user.domain.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,6 +16,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Table(name = "contract_results")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ContractResult {
 
     @Id
@@ -42,4 +46,13 @@ public class ContractResult {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Builder
+    public static ContractResult create(User user) {
+        return new ContractResult(user);
+    }
+
+    private ContractResult(User user) {
+        this.user = user;
+    }
 }

@@ -37,7 +37,6 @@ public class ClovaOCRService {
     @Value("${clova.secretKey}")
     private String clovaSecretKey;
 
-
     public String extractTextFromFile(MultipartFile rawFile) {
         try {
             List<ClovaOCRImageBody> files = new ArrayList<>();
@@ -76,7 +75,6 @@ public class ClovaOCRService {
         }
     }
 
-
     public String extractTextOnly(String clovaResponseJson){
         try{
             JsonNode root = objectMapper.readTree(clovaResponseJson);
@@ -103,7 +101,6 @@ public class ClovaOCRService {
             throw new IllegalArgumentException("해당 유저의 계약 결과가 존재하지 않습니다.");
         }
 
-        // JSON 데이터 추출
         try{
             JsonNode rootNode = objectMapper.readTree(text);
             JsonNode dataNode = rootNode.path("data");

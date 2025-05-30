@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record UserCreateRequest(
+public record SignupRequest (
 
         @NotBlank(message = "아이디는 필수입니다.")
         @Pattern(regexp = "^[a-zA-Z0-9]{5,15}$", message = "아이디는 중복되지 않아야 하며, 영문자와 숫자 조합 5~15자여야 합니다.")
