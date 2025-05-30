@@ -9,7 +9,6 @@ import navi4.zipsa.common.dto.SuccessResponse;
 import navi4.zipsa.common.exception.ExceptionMessages;
 import navi4.zipsa.infrastructure.api.clova.application.ClovaOCRService;
 import navi4.zipsa.command.JeonseContract.domain.LeaseContractAnalysisTemplate;
-import navi4.zipsa.infrastructure.api.clova.dto.ContractAnalysisRequest;
 import navi4.zipsa.infrastructure.api.gpt.application.GptApiService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +29,7 @@ public class ClovaController {
     private static final String SUCCESS_LEASE_CONTRACTS_EXTRACTION = "[SUCCESS]: 전세계약서 추출 및 저장 성공";
     private static final String SUCCESS_PROPERTY_TITLE_EXTRACTION = "[SUCCESS]: 등기부등본 추출 및 저장 성공";
 
+    // TODO: try-catch문 정리
     @PostMapping("/lease-contracts")
     public ResponseEntity<SuccessResponse<Object>> uploadLeaseContractFile (
             //@ModelAttribute ContractAnalysisRequest request
@@ -53,6 +53,7 @@ public class ClovaController {
             try {
                 parsedJson = objectMapper.readValue(contractAnalysisResponse, Object.class);
             } catch (JsonProcessingException e) {
+                log.error(FAIL_PARSING_GPT_RESPONSE + e.getMessage());
                 throw new IllegalArgumentException(FAIL_PARSING_GPT_RESPONSE + e + e.getMessage());
             }
 
@@ -61,6 +62,7 @@ public class ClovaController {
                     .status(HttpStatus.OK)
                     .body(SuccessResponse.success(SUCCESS_LEASE_CONTRACTS_EXTRACTION + "\n" + parsedJson));
         } catch (Exception e){
+            log.error(SUCCESS_LEASE_CONTRACTS_EXTRACTION + e.getMessage());
             throw new IllegalArgumentException(e + e.getMessage());
         }
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import navi4.zipsa.command.JeonseContract.domain.ContractResultRepository;
+import navi4.zipsa.common.exception.ExceptionMessages;
 import navi4.zipsa.infrastructure.api.clova.dto.ClovaOCRImageBody;
 import navi4.zipsa.infrastructure.api.clova.dto.ClovaOCRMessageBody;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,7 @@ public class ClovaOCRService {
     @Value("${clova.secretKey}")
     private String clovaSecretKey;
 
+    // TODO: 메시지 상수화
     public String extractTextFromFile(MultipartFile rawFile) {
         try {
             List<ClovaOCRImageBody> files = new ArrayList<>();
@@ -105,11 +107,13 @@ public class ClovaOCRService {
             JsonNode rootNode = objectMapper.readTree(text);
             JsonNode dataNode = rootNode.path("data");
             if (dataNode.isMissingNode()){
-                throw new IllegalArgumentException("전세계약서의 data 필드 존재하지 않음");
+                log.error("전세계약서의 data 필드 존재하지 않음");
+                throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "전세계약서 분석 오류");
             }
             contractResultRepository.updateJeonseContractJson(userId, dataNode.toPrettyString());
         } catch (JsonProcessingException e){
-            throw new IllegalArgumentException("전세계약서 데이터 JSON 파싱 에러" + e.getMessage(), e);
+            log.error("전세계약서 데이터 JSON 파싱 에러" + e.getMessage() + e);
+            throw new IllegalArgumentException("전세계약서 분석 오류");
         }
     }
 

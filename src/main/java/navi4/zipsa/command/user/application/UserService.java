@@ -24,8 +24,9 @@ public class UserService {
     public void signUp(SignupRequest request) {
         validateLoginIdDuplicated(request.loginId());
         User user = User.create(request.loginId(), request.password(), request.userName());
-        ContractResult contractResult  = ContractResult.create(user);
         userRepository.save(user);
+        userRepository.flush();
+        ContractResult contractResult  = ContractResult.create(user);
         contractResultRepository.save(contractResult);
     }
 
