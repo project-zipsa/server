@@ -1,5 +1,6 @@
 package navi4.zipsa.infrastructure.api.clova.presentation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,14 +49,14 @@ public class ClovaController {
             clovaOCRService.updateJeonseContractJson(userId, contractAnalysisResponse);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(SuccessResponse.success(SUCCESS_LEASE_CONTRACTS_EXTRACTION + "\n" + parsedJson));
+                    .body(SuccessResponse.success(SUCCESS_LEASE_CONTRACTS_EXTRACTION, parsedJson));
     }
 
     @PostMapping("/land-titles")
     public ResponseEntity<SuccessResponse<Object>> uploadLandTitleFile(
             @RequestParam Long userId,
             @RequestParam MultipartFile[] landTitles
-    ) {
+    ) throws JsonProcessingException {
         StringBuilder totalText = new StringBuilder();
         for (MultipartFile landTitle : landTitles) {
             String extractedText = clovaOCRService.extractTextFromFile(landTitle);
@@ -67,9 +68,11 @@ public class ClovaController {
                         + PropertyTitleExtractionTemplate.REQUEST_MESSAGE
                         + PropertyTitleExtractionTemplate.TEMPLATE).block();
 
+        Object parsedJson = objectMapper.readValue(contractAnalysisResponse, Object.class);
+
         clovaOCRService.updatePropertyTitleJson(userId, contractAnalysisResponse);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.success(SUCCESS_PROPERTY_TITLE_EXTRACTION, contractAnalysisResponse));
+                .body(SuccessResponse.success(SUCCESS_PROPERTY_TITLE_EXTRACTION, parsedJson));
     }
 }

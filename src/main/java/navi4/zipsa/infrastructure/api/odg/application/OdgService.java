@@ -71,7 +71,6 @@ public class OdgService {
                 .queryParam("_type", "json");
 
         String fullUri = builder.build().encode().toUriString() + "&serviceKey=" + ODG_SERVICE_KEY;
-        log.info("[ODG] 최종 uri: {}", fullUri);
         return webClient.get()
                 .uri(URI.create(fullUri))
                 .retrieve()
