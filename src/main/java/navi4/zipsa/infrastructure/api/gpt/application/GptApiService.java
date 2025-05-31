@@ -19,7 +19,7 @@ public class GptApiService {
 
     public GptApiService(WebClient.Builder builder,
                          @Value("${gpt.url}") String gptApiBaseUrl,
-                         @Value("gpt.key") String gptApiKey) {
+                         @Value("${gpt.key}") String gptApiKey) {
         this.webClient = builder
                 .baseUrl(gptApiBaseUrl)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + gptApiKey)
