@@ -33,7 +33,6 @@ public class SecurityConfig {
                 "https://web-zipsa-client-m04vkeuc49c11c0a.sel4.cloudtype.app"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        //configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
 
@@ -52,9 +51,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/zipsa/auth/**").permitAll() // 로그인, 회원가입 접근 허용
-                        .requestMatchers("/zipsa/contracts/total-analysis").permitAll() // 전체문서분석 접근 허용
-                        .requestMatchers("/contracts/total-analysis").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthorizationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();

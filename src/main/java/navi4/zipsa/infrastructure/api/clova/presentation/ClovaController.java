@@ -1,12 +1,10 @@
 package navi4.zipsa.infrastructure.api.clova.presentation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import navi4.zipsa.command.JeonseContract.domain.PropertyTitleExtractionTemplate;
 import navi4.zipsa.common.dto.SuccessResponse;
-import navi4.zipsa.common.exception.ExceptionMessages;
 import navi4.zipsa.infrastructure.api.clova.application.ClovaOCRService;
 import navi4.zipsa.command.JeonseContract.domain.LeaseContractAnalysisTemplate;
 import navi4.zipsa.infrastructure.api.gpt.application.GptApiService;
@@ -25,18 +23,15 @@ public class ClovaController {
     private final GptApiService gptApiService;
     private final ObjectMapper objectMapper;
 
-    private static final String FAIL_PARSING_GPT_RESPONSE = ExceptionMessages.ERROR_PREFIX  + "GPT 분석 응답 파싱 실패";
     private static final String SUCCESS_LEASE_CONTRACTS_EXTRACTION = "[SUCCESS]: 전세계약서 추출 및 저장 성공";
     private static final String SUCCESS_PROPERTY_TITLE_EXTRACTION = "[SUCCESS]: 등기부등본 추출 및 저장 성공";
 
-    // TODO: try-catch문 정리
     @PostMapping("/lease-contracts")
     public ResponseEntity<SuccessResponse<Object>> uploadLeaseContractFile (
             //@ModelAttribute ContractAnalysisRequest request
             @RequestParam Long userId,
             @RequestParam MultipartFile[] leaseContractFiles
-    ){
-        try{
+    ) throws Exception {
             StringBuilder totalText = new StringBuilder();
             for (MultipartFile leaseContractFile : leaseContractFiles) {
                 String extractedText = clovaOCRService.extractTextFromFile(leaseContractFile);
@@ -49,30 +44,18 @@ public class ClovaController {
                             + LeaseContractAnalysisTemplate.RESPONSE_CONDITION
                             + LeaseContractAnalysisTemplate.ANALYSIS_TEMPLATE).block();
 
-            Object parsedJson;
-            try {
-                parsedJson = objectMapper.readValue(contractAnalysisResponse, Object.class);
-            } catch (JsonProcessingException e) {
-                log.error(FAIL_PARSING_GPT_RESPONSE + e.getMessage());
-                throw new IllegalArgumentException(FAIL_PARSING_GPT_RESPONSE + e + e.getMessage());
-            }
-
+            Object parsedJson = objectMapper.readValue(contractAnalysisResponse, Object.class);
             clovaOCRService.updateJeonseContractJson(userId, contractAnalysisResponse);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(SuccessResponse.success(SUCCESS_LEASE_CONTRACTS_EXTRACTION + "\n" + parsedJson));
-        } catch (Exception e){
-            log.error(SUCCESS_LEASE_CONTRACTS_EXTRACTION + e.getMessage());
-            throw new IllegalArgumentException(e + e.getMessage());
-        }
-
     }
 
     @PostMapping("/land-titles")
     public ResponseEntity<SuccessResponse<Object>> uploadLandTitleFile(
             @RequestParam Long userId,
             @RequestParam MultipartFile[] landTitles
-    ){
+    ) {
         StringBuilder totalText = new StringBuilder();
         for (MultipartFile landTitle : landTitles) {
             String extractedText = clovaOCRService.extractTextFromFile(landTitle);
@@ -87,6 +70,6 @@ public class ClovaController {
         clovaOCRService.updatePropertyTitleJson(userId, contractAnalysisResponse);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.success(SUCCESS_PROPERTY_TITLE_EXTRACTION + "\n" + contractAnalysisResponse));
+                .body(SuccessResponse.success(SUCCESS_PROPERTY_TITLE_EXTRACTION, contractAnalysisResponse));
     }
 }

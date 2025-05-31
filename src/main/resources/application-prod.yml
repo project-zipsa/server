@@ -45,6 +45,6 @@ server:
 
 logging:
   level:
-    org.springframework.security: DEBUG
-    org.springframework.web.cors: TRACE
-    org.apache.coyote.http11: DEBUG
+    root: INFO
+    org.springframework.security: INFO
+    org.springframework.web.cors: INFO
