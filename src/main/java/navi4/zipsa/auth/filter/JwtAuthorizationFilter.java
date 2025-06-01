@@ -28,7 +28,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (token != null && jwtProvider.validateToken(token)) {
             String userLoginId = jwtProvider.getUserLoginId(token);
 
-            // 권한 없이 username 만 인증 처리
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(userLoginId, null, List.of());
 
