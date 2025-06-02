@@ -10,6 +10,7 @@ import navi4.zipsa.command.user.dto.LoginRequest;
 import navi4.zipsa.command.user.dto.SignupRequest;
 import navi4.zipsa.auth.utils.JwtProvider;
 import navi4.zipsa.command.user.dto.SignupResponse;
+import navi4.zipsa.command.user.exception.UserExceptionMessages;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,21 +43,21 @@ public class UserService {
 
     private void validateLoginIdDuplicated(String loginId){
         if (userRepository.existsByLoginId(loginId)){
-            throw new IllegalArgumentException(loginId + "는 이미 존재하는 아이디입니다.");
+            throw new IllegalArgumentException(loginId + UserExceptionMessages.DUPLICATED_LOGIN_ID);
         }
     }
 
     private User validateUser(LoginRequest request) {
         User user = validateUserLoginId(request.loginId());
         if (!user.getPassword().equals(request.password())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new IllegalArgumentException(UserExceptionMessages.WRONG_PASSWORD);
         }
         return user;
     }
 
     private User validateUserLoginId(String loginId) {
         return userRepository.findUserByLoginId(loginId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
+                .orElseThrow(() -> new IllegalArgumentException(UserExceptionMessages.NOT_EXIST_LOGIN_ID));
     }
 
 }
