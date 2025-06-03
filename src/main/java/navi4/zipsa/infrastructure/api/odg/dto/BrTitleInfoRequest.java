@@ -16,7 +16,7 @@ public record BrTitleInfoRequest(
         @JsonProperty("지하층수") String ugrndFlrCnt,
         @JsonProperty("건물구조") String strctCdNm,
         @JsonProperty("기타구조") String etcStrct,
-        @JsonProperty("사용ㄱ승인일") String useAprDay
+        @JsonProperty("사용승인일") String useAprDay
 ) {
 }
 
