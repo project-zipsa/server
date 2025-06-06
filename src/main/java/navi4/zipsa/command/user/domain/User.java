@@ -28,7 +28,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "user_name", unique = true, nullable = false)
+    @Column(name = "user_name", nullable = false)
     private String userName;
 
     @CreatedDate
