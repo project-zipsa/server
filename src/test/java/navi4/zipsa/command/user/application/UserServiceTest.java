@@ -3,7 +3,7 @@ package navi4.zipsa.command.user.application;
 import jakarta.transaction.Transactional;
 import navi4.zipsa.command.user.dto.LoginRequest;
 import navi4.zipsa.command.user.dto.SignupRequest;
-import navi4.zipsa.command.user.dto.SignupResponse;
+import navi4.zipsa.command.user.dto.UserResponse;
 import navi4.zipsa.command.user.exception.UserExceptionMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +41,7 @@ public class UserServiceTest {
     void signUpSuccessTest(){
         // when
         userService.signUp(signupRequest);
-        SignupResponse response = userService.getUserByLoginId(loginId);
+        UserResponse response = userService.getUserByLoginId(loginId);
 
         //then
         assertThat(response.loginId()).isEqualTo(loginId);

@@ -3,10 +3,7 @@ package navi4.zipsa.command.user.presentation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import navi4.zipsa.command.user.application.UserService;
-import navi4.zipsa.command.user.dto.LoginRequest;
-import navi4.zipsa.command.user.dto.LoginResponse;
-import navi4.zipsa.command.user.dto.SignupRequest;
-import navi4.zipsa.command.user.dto.SignupResponse;
+import navi4.zipsa.command.user.dto.*;
 import navi4.zipsa.common.dto.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<SignupResponse>> getUserInfo(@RequestParam String loginId) {
-        SignupResponse response = userService.getUserByLoginId(loginId);
+    public ResponseEntity<SuccessResponse<UserResponse>> getUserInfo(@RequestParam String loginId) {
+        UserResponse response = userService.getUserByLoginId(loginId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.success(response));

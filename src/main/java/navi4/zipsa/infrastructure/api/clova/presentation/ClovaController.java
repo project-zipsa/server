@@ -29,7 +29,6 @@ public class ClovaController {
 
     @PostMapping("/lease-contracts")
     public ResponseEntity<SuccessResponse<Object>> uploadLeaseContractFile (
-            //@ModelAttribute ContractAnalysisRequest request
             @RequestParam Long userId,
             @RequestParam MultipartFile[] leaseContractFiles
     ) throws Exception {

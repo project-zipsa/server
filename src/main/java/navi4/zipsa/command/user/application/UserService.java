@@ -9,7 +9,7 @@ import navi4.zipsa.command.user.domain.UserRepository;
 import navi4.zipsa.command.user.dto.LoginRequest;
 import navi4.zipsa.command.user.dto.SignupRequest;
 import navi4.zipsa.auth.utils.JwtProvider;
-import navi4.zipsa.command.user.dto.SignupResponse;
+import navi4.zipsa.command.user.dto.UserResponse;
 import navi4.zipsa.command.user.exception.UserExceptionMessages;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +37,8 @@ public class UserService {
         return jwtProvider.createToken(user.getLoginId());
     }
 
-    public SignupResponse getUserByLoginId(String loginId) {
-        return SignupResponse.from(validateUserLoginId(loginId));
+    public UserResponse getUserByLoginId(String loginId) {
+        return UserResponse.from(validateUserLoginId(loginId));
     }
 
     private void validateLoginIdDuplicated(String loginId){
