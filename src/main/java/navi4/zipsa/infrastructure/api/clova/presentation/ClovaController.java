@@ -68,7 +68,6 @@ public class ClovaController {
                         + PropertyTitleExtractionTemplate.TEMPLATE).block();
 
         Object parsedJson = objectMapper.readValue(contractAnalysisResponse, Object.class);
-
         clovaOCRService.updatePropertyTitleJson(userId, contractAnalysisResponse);
         return ResponseEntity
                 .status(HttpStatus.OK)
