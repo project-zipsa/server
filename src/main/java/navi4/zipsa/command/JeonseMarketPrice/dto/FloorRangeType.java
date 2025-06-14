@@ -28,7 +28,7 @@ public enum FloorRangeType {
     }
 
     public boolean contains(int floor) {
-        return floor >= min && floor < max;
+        return floor >= min && floor <= max;
     }
 
     public static FloorRangeType from(int floor) {
