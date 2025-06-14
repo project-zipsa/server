@@ -22,7 +22,7 @@ public class ContractService {
 
     private final ContractResultRepository contractResultRepository;
     private final ObjectMapper objectMapper;
-    private final GptApiService gptApiService; // TODO: 서비스 간 의존이 한 방향인지 재확인
+    private final GptApiService gptApiService;
 
     private static final String NOT_FOUND_CONTRACT_RESULT = ExceptionMessages.ERROR_PREFIX + "계약서를 불러올 수 없습니다.";
     private static final String NOT_FOUND_JEONSE_CONTRACT_JSON = ExceptionMessages.ERROR_PREFIX + "[Error]: 저장된 전세계약 정보가 없습니다.";

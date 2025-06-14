@@ -10,6 +10,7 @@ import navi4.zipsa.command.JeonseContract.domain.ContractResultRepository;
 import navi4.zipsa.common.exception.ExceptionMessages;
 import navi4.zipsa.infrastructure.api.clova.dto.ClovaOCRImageBody;
 import navi4.zipsa.infrastructure.api.clova.dto.ClovaOCRMessageBody;
+import navi4.zipsa.infrastructure.exception.InfraErrorMessages;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -28,6 +29,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClovaOCRService {
 
+    private static final String CLOVA_OCR_VERSION = "V2";
+    private static final String CLOVA_OCR_REQUEST_ID = "1234";
+    private static final String CLOVA_OCR_LANGUAGE = "ko";
+
     private final ContractResultRepository contractResultRepository;
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
@@ -38,7 +43,6 @@ public class ClovaOCRService {
     @Value("${clova.secretKey}")
     private String clovaSecretKey;
 
-    // TODO: 메시지 상수화
     public String extractTextFromFile(MultipartFile rawFile) {
         try {
             List<ClovaOCRImageBody> files = new ArrayList<>();
@@ -57,7 +61,7 @@ public class ClovaOCRService {
 
             files.add(new ClovaOCRImageBody(extension, rawFile.getOriginalFilename()));
             ClovaOCRMessageBody messageBody = new ClovaOCRMessageBody(
-                    "V2", "1234", System.currentTimeMillis(), "ko", files
+                    CLOVA_OCR_VERSION, CLOVA_OCR_REQUEST_ID, System.currentTimeMillis(), CLOVA_OCR_LANGUAGE, files
             );
 
             String messageJson = objectMapper.writeValueAsString(messageBody);
@@ -73,14 +77,13 @@ public class ClovaOCRService {
                     .block();
 
         } catch (Exception e) {
-            throw new IllegalArgumentException("[텍스트 추출 요청 실패]: " + e.getMessage(), e);
+            throw new IllegalArgumentException(InfraErrorMessages.CLOVA_TEXT_EXTRACTION_FAILED_PREFIX + e.getMessage(), e);
         }
     }
 
     public String extractTextOnly(String clovaResponseJson){
         try{
             JsonNode root = objectMapper.readTree(clovaResponseJson);
-
             JsonNode fields = root
                     .path("images")
                     .get(0)
@@ -100,38 +103,37 @@ public class ClovaOCRService {
 
     public void updateJeonseContractJson(Long userId, String text){
         if (!contractResultRepository.existsContractResultByUserId(userId)){
-            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "해당 유저의 계약 결과가 존재하지 않습니다.");
+            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + InfraErrorMessages.NOT_EXIST_USER_CONTRACT_RESULT);
         }
         try{
             JsonNode rootNode = objectMapper.readTree(text);
             JsonNode dataNode = rootNode.path("data");
             if (dataNode.isMissingNode()){
                 log.error("전세계약서의 data 필드 존재하지 않음");
-                throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "전세계약서 분석 오류");
+                throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + InfraErrorMessages.JEONSE_CONTRACT_ANALYSIS_ERROR);
             }
             contractResultRepository.updateJeonseContractJson(userId, dataNode.toPrettyString());
         } catch (Exception e){
             log.error("전세계약서 데이터 JSON 파싱 에러 등 에러 발생" + e.getMessage() + e);
-            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "전세계약서 분석 오류");
+            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + InfraErrorMessages.JEONSE_CONTRACT_ANALYSIS_ERROR);
         }
     }
 
     public void updatePropertyTitleJson(Long userId, String text){
         if (!contractResultRepository.existsContractResultByUserId(userId)){
-            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "해당 유저의 계약 결과가 존재하지 않습니다.");
+            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + InfraErrorMessages.NOT_EXIST_USER_CONTRACT_RESULT);
         }
-
         try{
             JsonNode rootNode = objectMapper.readTree(text);
             JsonNode dataNode = rootNode.path("data");
             if (dataNode.isMissingNode()){
                 log.error("등기부등본의 data 필드 존재하지 않음");
-                throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "등기부등본 분석 오류");
+                throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + InfraErrorMessages.PROPERTY_TITLE_ANALYSIS_ERROR);
             }
             contractResultRepository.updatePropertyTitleJson(userId, dataNode.toPrettyString());
         } catch (JsonProcessingException e){
             log.error("등기부등본 데이터 JSON 파싱 에러" + e.getMessage() + e);
-            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + "등기부등본 데이터 JSON 파싱 에러");
+            throw new IllegalArgumentException(ExceptionMessages.ERROR_PREFIX + InfraErrorMessages.PROPERTY_TITLE_ANALYSIS_ERROR);
         }
     }
 }

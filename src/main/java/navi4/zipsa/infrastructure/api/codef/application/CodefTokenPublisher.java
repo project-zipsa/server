@@ -2,7 +2,7 @@ package navi4.zipsa.infrastructure.api.codef.application;
 
 import lombok.extern.slf4j.Slf4j;
 import navi4.zipsa.common.exception.ExceptionMessages;
-import navi4.zipsa.infrastructure.exception.ErrorMessage;
+import navi4.zipsa.infrastructure.exception.InfraErrorMessages;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -51,8 +51,8 @@ public class CodefTokenPublisher {
                     .bodyToMono(new ParameterizedTypeReference<HashMap<String, Object>>() {})
                     .block();
         } catch (WebClientResponseException e) {
-            log.error(ErrorMessage.CODEF_TOKEN_REQUEST_FAILED, e.getResponseBodyAsString());
-            throw new IllegalArgumentException(ErrorMessage.CODEF_TOKEN_REQUEST_FAILED + e.getResponseBodyAsString());
+            log.error(InfraErrorMessages.CODEF_TOKEN_REQUEST_FAILED_PREFIX, e.getResponseBodyAsString());
+            throw new IllegalArgumentException(InfraErrorMessages.CODEF_TOKEN_REQUEST_FAILED_PREFIX + e.getResponseBodyAsString());
         } catch (Exception e) {
             throw new IllegalArgumentException(ExceptionMessages.SERVER_ERROR + e.getMessage());
         }

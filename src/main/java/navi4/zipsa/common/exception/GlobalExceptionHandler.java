@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    //private static final String ALLOWED_ORIGIN = "https://web-zipsa-client-m04vkeuc49c11c0a.sel4.cloudtype.app";
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationError(MethodArgumentNotValidException ex){
         String message = ex.getBindingResult().getFieldErrors().stream()
@@ -23,7 +21,6 @@ public class GlobalExceptionHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .orElse(ExceptionMessages.INVALID_REQUEST);
         log.error(message, ex);
-        //return buildCorsErrorResponse(message);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
@@ -45,11 +42,4 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ExceptionMessages.SERVER_ERROR));
     }
 
-//    private ResponseEntity<ErrorResponse> buildCorsErrorResponse(String message) {
-//        return ResponseEntity
-//                .status(HttpStatus.BAD_REQUEST)
-//                .header("Access-Control-Allow-Origin", ALLOWED_ORIGIN)
-//                .header("Access-Control-Allow-Credentials", "true")
-//                .body(new ErrorResponse(message));
-//    }
 }

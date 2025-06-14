@@ -12,7 +12,6 @@ import java.util.Map;
 public class CodefService {
 
     private final CodefTokenPublisher tokenPublisher;
-    private static final String GPT_API_BASE_URL = "https://api.openai.com/v1/chat/completions";
 
     @Value("${codef.client.publicKey}")
     private String publicKey;

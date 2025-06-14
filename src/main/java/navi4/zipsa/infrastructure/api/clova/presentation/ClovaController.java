@@ -24,8 +24,9 @@ public class ClovaController {
     private final GptApiService gptApiService;
     private final ObjectMapper objectMapper;
 
-    private static final String SUCCESS_LEASE_CONTRACTS_EXTRACTION = "[SUCCESS]: 전세계약서 추출 및 저장 성공";
-    private static final String SUCCESS_PROPERTY_TITLE_EXTRACTION = "[SUCCESS]: 등기부등본 추출 및 저장 성공";
+    private static final String SUCCESS_PREFIX = "[SUCCESS]: ";
+    private static final String SUCCESS_LEASE_CONTRACTS_EXTRACTION = SUCCESS_PREFIX + "전세계약서 추출 및 저장 성공";
+    private static final String SUCCESS_PROPERTY_TITLE_EXTRACTION = SUCCESS_PREFIX + "등기부등본 추출 및 저장 성공";
 
     @PostMapping("/lease-contracts")
     public ResponseEntity<SuccessResponse<Object>> uploadLeaseContractFile (
