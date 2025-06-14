@@ -3,6 +3,7 @@ package navi4.zipsa.command.JeonseMarketPrice.application;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import navi4.zipsa.command.JeonseMarketPrice.dto.*;
+import navi4.zipsa.common.exception.ExceptionMessages;
 import navi4.zipsa.common.utils.CsvReader;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +16,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MarketPriceService {
 
-    public MarketPriceResponse calculateMarketPrice(MarketPriceRequest userHousingData) throws IOException {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("data/housing.csv");
+    private final static String HOUSING_DATA_PATH = "data/housing.csv";
+    private final static String FILE_NOT_FOUNT_ERROR = ExceptionMessages.ERROR_PREFIX + "해당 경로에 파일이 존재하지 않습니다.";
+    private final static String SIMILAR_DATA_NOT_FOUND_MESSAGE = "입력하신 조건과의 유사 조건 데이터가 존재하지 않습니다.";
+    private final static double DEFAULT_HOUSE_PRICE = 0;
+    private static final int PERCENT_BASE = 100;
+
+    // TODO: 하드코딩된 값 수정
+    public Object calculateMarketPrice(MarketPriceRequest userHousingData) throws IOException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(HOUSING_DATA_PATH);
         if (inputStream == null) {
-            throw new FileNotFoundException("housing.csv not found in classpath");
+            throw new FileNotFoundException(FILE_NOT_FOUNT_ERROR);
         }
         List<String[]> housingData = CsvReader.read(inputStream);
 
         int totalPrice = 0;
-        int cnt = 0;
+        int sameDataCnt = 0;
         int totalRecentDataPrice = 0;
         int recentDataCnt = 0;
         for (String[] datum : housingData) {
@@ -34,11 +42,11 @@ public class MarketPriceService {
                     Integer.parseInt(datum[6]),
                     datum[7],
                     datum[8],
-                    0
+                    DEFAULT_HOUSE_PRICE
             );
             if (isSameCondition(userHousingData, houseData)){
                 totalPrice += Integer.parseInt(datum[4]);
-                cnt ++;
+                sameDataCnt ++;
             }
             if (isSimilarCondition(userHousingData, houseData, datum[3])){
                 totalRecentDataPrice += Integer.parseInt(datum[4]);
@@ -46,11 +54,15 @@ public class MarketPriceService {
             }
         }
 
-        double averageHousePrice = (double) totalPrice / cnt;
+        if (sameDataCnt == 0 || recentDataCnt == 0){
+            return SIMILAR_DATA_NOT_FOUND_MESSAGE;
+        }
+
+        double averageHousePrice = (double) totalPrice / sameDataCnt;
         double userPrice = userHousingData.price();
-        double differencePercent = ((userPrice - averageHousePrice) / averageHousePrice) * 100;
+        double differencePercent = ((userPrice - averageHousePrice) / averageHousePrice) * PERCENT_BASE;
         double averageRecentHousePrice = (double) totalRecentDataPrice / recentDataCnt;
-        double jeonseRatio = (userPrice / averageRecentHousePrice) * 100;
+        double jeonseRatio = (userPrice / averageRecentHousePrice) * PERCENT_BASE;
         jeonseRatio = Math.round(jeonseRatio * 10) / 10.0;
         return new MarketPriceResponse(averageHousePrice, userPrice, differencePercent, jeonseRatio);
     }
