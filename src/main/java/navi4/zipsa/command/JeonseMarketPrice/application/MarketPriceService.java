@@ -55,6 +55,10 @@ public class MarketPriceService {
         }
 
         if (sameDataCnt == 0 || recentDataCnt == 0){
+            log.error("요청 주소: {}", userHousingData.address());
+            log.error("요청 층수: {}", userHousingData.floor());
+            log.error("sameData: {}", sameDataCnt);
+            log.error("recentData: {}", recentDataCnt);
             return SIMILAR_DATA_NOT_FOUND_MESSAGE;
         }
 
