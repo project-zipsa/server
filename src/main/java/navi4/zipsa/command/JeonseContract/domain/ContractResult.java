@@ -39,6 +39,9 @@ public class ContractResult {
     @Column(name = "building_register_json", columnDefinition = "TEXT")
     private String buildingRegisterJson;
 
+    @Column(name = "raw_lease_contract_text", columnDefinition = "TEXT")
+    private String rawLeaseContractText;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

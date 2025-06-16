@@ -42,4 +42,14 @@ public interface ContractResultRepository extends JpaRepository<ContractResult, 
     """)
     void updateBuildingRegisterJson(@Param("userId") Long userId, @Param("text") String text);
 
+    @Modifying
+    @Transactional
+    @Query("""
+        UPDATE ContractResult cr
+        SET cr.rawLeaseContractText = :text
+        WHERE cr.user.id = :userId
+    """)
+    void updateRawLeaseContractText(@Param("userId") Long userId, @Param("text") String text);
+
+
 }
