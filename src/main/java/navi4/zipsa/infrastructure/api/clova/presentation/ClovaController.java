@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import navi4.zipsa.command.JeonseContract.application.ContractService;
+import navi4.zipsa.command.JeonseContract.domain.LeaseContractAnalysisTemplate;
 import navi4.zipsa.command.JeonseContract.domain.PropertyTitleExtractionTemplate;
 import navi4.zipsa.common.dto.SuccessResponse;
 import navi4.zipsa.infrastructure.api.clova.application.ClovaOCRService;
@@ -33,27 +34,24 @@ public class ClovaController {
     public ResponseEntity<SuccessResponse<Object>> uploadLeaseContractFile (
             @RequestParam Long userId,
             @RequestParam MultipartFile[] leaseContractFiles
-    ) {
-            StringBuilder totalText = new StringBuilder();
-            for (MultipartFile leaseContractFile : leaseContractFiles) {
-                String extractedText = clovaOCRService.extractTextFromFile(leaseContractFile);
-                totalText.append(clovaOCRService.extractTextOnly(extractedText));
-            }
-            contractService.updateLeaseContractRawText(userId, String.valueOf(totalText));
-//            String contractAnalysisResponse = gptApiService.chat(
-//                    totalText
-//                            + LeaseContractAnalysisTemplate.REQUEST_DETAIL
-//                            + LeaseContractAnalysisTemplate.RESPONSE_CONDITION
-//                            + LeaseContractAnalysisTemplate.ANALYSIS_TEMPLATE).block();
-//
-//            Object parsedJson = objectMapper.readValue(contractAnalysisResponse, Object.class);
-//            clovaOCRService.updateJeonseContractJson(userId, contractAnalysisResponse);
-//            return ResponseEntity
-//                    .status(HttpStatus.OK)
-//                    .body(SuccessResponse.success(SUCCESS_LEASE_CONTRACTS_EXTRACTION, parsedJson));
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(SuccessResponse.success(SUCCESS_LEASE_CONTRACTS_EXTRACTION));
+    ) throws JsonProcessingException {
+        StringBuilder totalText = new StringBuilder();
+        for (MultipartFile leaseContractFile : leaseContractFiles) {
+            String extractedText = clovaOCRService.extractTextFromFile(leaseContractFile);
+            totalText.append(clovaOCRService.extractTextOnly(extractedText));
+        }
+        contractService.updateLeaseContractRawText(userId, String.valueOf(totalText));
+        String contractAnalysisResponse = gptApiService.chat(
+                totalText
+                            + LeaseContractAnalysisTemplate.REQUEST_DETAIL
+                            + LeaseContractAnalysisTemplate.RESPONSE_CONDITION
+                            + LeaseContractAnalysisTemplate.ANALYSIS_TEMPLATE).block();
+
+            Object parsedJson = objectMapper.readValue(contractAnalysisResponse, Object.class);
+            clovaOCRService.updateJeonseContractJson(userId, contractAnalysisResponse);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(SuccessResponse.success(SUCCESS_LEASE_CONTRACTS_EXTRACTION, parsedJson));
     }
 
     @GetMapping("/lease-contracts")
