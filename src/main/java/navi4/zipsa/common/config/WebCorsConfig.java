@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebCorsConfig implements WebMvcConfigurer {
 
-    private static final String ALLOWED_ORIGIN = "https://web-zipsa-client-m04vkeuc49c11c0a.sel4.cloudtype.app";
+    private static final String ALLOWED_ORIGIN = "https://web-client-m04vkeuc49c11c0a.sel4.cloudtype.app";
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

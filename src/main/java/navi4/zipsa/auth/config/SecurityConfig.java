@@ -32,7 +32,7 @@ public class SecurityConfig {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedOrigins(List.of(
                     "http://localhost:5173",
-                    "https://web-zipsa-client-m04vkeuc49c11c0a.sel4.cloudtype.app"));
+                    "https://web-client-m04vkeuc49c11c0a.sel4.cloudtype.app"));
             configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             configuration.addAllowedHeader("*");
             configuration.setAllowCredentials(true);
