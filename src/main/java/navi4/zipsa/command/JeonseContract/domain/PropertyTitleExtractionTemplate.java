@@ -2,10 +2,10 @@ package navi4.zipsa.command.JeonseContract.domain;
 
 public class PropertyTitleExtractionTemplate {
 
-    public static final String REQUEST_MESSAGE
-            = "이미지에서 추출한 위 등기부등본 텍스트를 바탕으로 아래 템플릿에 맞춰 필요한 데이터를 추출해줘";
+	public static final String REQUEST_MESSAGE
+			= "이미지에서 추출한 위 등기부등본 텍스트를 바탕으로 아래 템플릿에 맞춰 필요한 데이터를 추출해줘";
 
-    public static final String TEMPLATE = """
+	public static final String TEMPLATE = """
             [출력 규약]
              - 날짜정보는 YYYY-MM-DD로 출력
              - 권리관계 항목은 갑구/을구 구분 없이 모두 탐색
@@ -15,7 +15,7 @@ public class PropertyTitleExtractionTemplate {
              - 각 항목의 실제 등기 위치(갑구/을구)는 "구분" 필드로 구분
              - 권리관계에 해당하지 않으면 "해당없음"으로 표시
              - 아래 '권리관계 항목'에서 해당하는 항목의 알파벳만 출력
-             
+
              [권리관계 항목]
              	(A) 가등기
              	(B) 저당권 혹은 근저당권
@@ -40,11 +40,12 @@ public class PropertyTitleExtractionTemplate {
                "data": {
                  "소유자명": "",      // 현재 소유자 성명
                  "전체주소": "",
+                 "건물명": "",
                  "건물용도" : ""      // ex) 주택, 상가, 오피스텔, 제1종 근린생활시설, 사무실, 다중주택 등의 건물용도
                  "건물구조" : "",     // ex) 철근콘크리트조, RC조, 벽돌조, 목조 등의 건물구조
                  "폐쇄등기여부" : "",  // True/False(관련 정보가 없다면 False)
                  "갑구_전체": [            // 갑구가 여러 개일 수 있으므로 배열로 처리
-	                 {
+                 {
 		                 "등기목적": "",
 		                 "등기원인": "",
 		                 "등기일": "",
