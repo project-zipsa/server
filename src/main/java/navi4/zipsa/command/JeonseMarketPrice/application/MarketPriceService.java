@@ -85,6 +85,7 @@ public class MarketPriceService {
     private boolean isSimilarCondition(MarketPriceRequest userHousingData, MarketPriceRequest houseData, String yearMonth){
         return (
                 userHousingData.address().equals(houseData.address())
+                        && houseData.housingType().equals(ContractType.SALE.getDescription())
                         && AreaRangeType.areInSameRange(userHousingData.area(), houseData.area())
                         && isInRecentDateRange(yearMonth)
                 );
