@@ -58,7 +58,7 @@ public class ClovaController {
     public ResponseEntity<SuccessResponse<Object>> getLeaseContracts (@RequestParam Long userId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.success("전세계약서 필드 추출 성공", contractService.analyzeLeaseContract(userId)));
+                .body(SuccessResponse.success("전세계약서 필드 추출 성공", contractService.getContractResultsByUserId(userId).getJeonseContractJson()));
     }
 
     @PostMapping("/land-titles")
